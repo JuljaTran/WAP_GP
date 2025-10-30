@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 function Register() {
     const [name, setName] = useState('');
@@ -9,12 +10,19 @@ function Register() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError(null);
+
+        // Placeholder for actual register logic
+        try {
+            console.log('Register attempt:', {name, email, password});
+        } catch (error) {
+            setError('Register failed. Please try again.');
+        }
     }
 
     return (
         <div className="login-container">
             <form onSubmit={handleSubmit} className="login-form">
-                <h2>Login</h2>
+                <h2>Register</h2>
                 {error && <div className="error-message">{error}</div>}
                 
                 <div className="form-group">
@@ -48,6 +56,7 @@ function Register() {
                     />
                 </div>
                 <button type="submit">Register</button>
+                <button type="button">Go to Login</button>
             </form>
         </div>
     )

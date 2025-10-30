@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
+
 
 function Login() {
     const [name, setName] = useState('');
@@ -8,6 +10,13 @@ function Login() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError(null);
+
+        // Placeholder for actual login logic
+        try {
+            console.log('Login attempt:', {name, password});
+        } catch (error) {
+            setError('Login failed. Please try again.');
+        }
     }
 
     return (
@@ -36,6 +45,7 @@ function Login() {
                     />
                 </div>
                 <button type="submit">Login</button>
+                <button type="button">Go to Register</button>
             </form>
         </div>
     )
