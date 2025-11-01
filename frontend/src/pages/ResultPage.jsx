@@ -26,17 +26,27 @@ export default function ResultPage() {
     <div style={{ padding: 20 }}>
       <Navbar />
       <h2>Quiz Finished!</h2>
+      <p>
+        Player: <strong>{user.username || "Guest"}</strong>
+      </p>
+      <p>Total points: <strong>{user.totalPoints}</strong></p>
       <p>Points earned this quiz: {score}</p>
       <p>{message}</p>
 
       {unlockedThisQuiz ? (
-        <p>🎉 You unlocked a new animal: {unlockedThisQuiz}!</p>
+        <p>🎉 You unlocked a new animal: {" "}
+         {thresholds.find(t => t.key === unlockedThisQuiz)?.emoji}{" "}
+          {unlockedThisQuiz}!
+        </p>
       ) : nextThreshold ? (
-        <p>Next animal ({nextThreshold.key}) unlocks in {pointsNeeded} points.</p>
+        <p>
+          Next animal ({nextThreshold.emoji} {nextThreshold.key}) unlocks in{" "}
+          {pointsNeeded} points.
+        </p>
       ) : (
         <p>All animals unlocked! 🏆</p>
       )}
-
+      
       <button onClick={() => nav("/leaderboard")}>Go to Leaderboard</button>
     </div>
   );

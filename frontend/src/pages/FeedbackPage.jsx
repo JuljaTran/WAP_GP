@@ -4,7 +4,7 @@ import { useUser } from "../context/UserContext";
 export default function FeedbackPage() {
   const { state } = useLocation();
   const navigate = useNavigate();
-  const { addPoints } = useUser();
+  const { user, addPoints } = useUser();
 
   if (!state) return <div className="container card">No feedback data.</div>;
 
@@ -21,8 +21,25 @@ export default function FeedbackPage() {
     totalQuestions
   } = state;
 
-  // Връща животното, отключено в този куиз (ако има такова)
-  const unlockedThisQuiz = isCorrect ? addPoints(pointsGained) : null;
+  const unlockedThisQuiz = null;
+
+  if (isCorrect) {
+    // Add points to user
+    addPoints(pointsGained);
+
+    // Determine if a new animal is unlocked with these points
+    const thresholds = [
+      { key: "rabbit", pts: 100 },
+      { key: "dog", pts: 500 },
+      { key: "lion", pts: 1000 }
+    ];
+
+    thresholds.forEach(t => {
+      if ((user.totalPoints + pointsGained) >= t.pts && !user.unlocked.includes(t.key)) {
+        unlockedThisQuiz = t.key;
+      }
+    });
+  }
 
   const handleNext = () => {
     if (nextIndex < totalQuestions) {
