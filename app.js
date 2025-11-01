@@ -1,7 +1,9 @@
+//file 
 import express from 'express'
 import path from 'path';
 import { fileURLToPath } from 'url';
 import api from "./src/routing/api.js";
+import auth from "./src/routing/auth.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -10,6 +12,7 @@ const port = 1234
 
 app.use(express.json())
 app.use('/api', api)
+app.use('/api/auth', auth) //middleware auth
 
 app.use(express.static('dist'));
 app.use(function(req, res) {

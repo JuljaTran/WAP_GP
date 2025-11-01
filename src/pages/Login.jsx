@@ -1,21 +1,17 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
 
 function Login() {
-    const [name, setName] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
-    
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError(null);
-
-        // Placeholder for actual login logic
-        try {
-            console.log('Login attempt:', {name, password});
-        } catch (error) {
-            setError('Login failed. Please try again.');
+        const res = await Login({ email, passwprd });
+        if (res.error) {
+            return setError(res.error);
         }
     }
 
@@ -29,8 +25,8 @@ function Login() {
                     <input
                         type="text"
                         id="name"
-                        value={name}    
-                        onChange={(e) => setName(e.target.value)}
+                        value={username}    
+                        onChange={(e) => setUsername(e.target.value)}
                         required
                     />
                 </div>
@@ -45,7 +41,9 @@ function Login() {
                     />
                 </div>
                 <button type="submit">Login</button>
-                <button type="button">Go to Register</button>
+                <button>            
+                    <Link to="/register">Go to register</Link>
+                </button>
             </form>
         </div>
     )

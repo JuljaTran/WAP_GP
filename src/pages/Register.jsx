@@ -1,8 +1,7 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
 
 function Register() {
-    const [name, setName] = useState('');
+    const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
@@ -30,8 +29,8 @@ function Register() {
                     <input
                         type="text"
                         id="name"
-                        value={name}    
-                        onChange={(e) => setName(e.target.value)}
+                        value={username}    
+                        onChange={(e) => setUsername(e.target.value)}
                         required
                     />
                 </div>
