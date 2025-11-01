@@ -1,11 +1,13 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 
 
 function Login() {
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
+    const navigate = useNavigate()
     
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -14,9 +16,14 @@ function Login() {
         // Placeholder for actual login logic
         try {
             console.log('Login attempt:', {name, password});
+            navigate('/home');
         } catch (error) {
             setError('Login failed. Please try again.');
         }
+    }
+
+    const goToRegister = () => {
+        navigate('/register');
     }
 
     return (
@@ -45,7 +52,7 @@ function Login() {
                     />
                 </div>
                 <button type="submit">Login</button>
-                <button type="button">Go to Register</button>
+                <button type="button" onClick={goToRegister}>Go to Register</button>
             </form>
         </div>
     )

@@ -1,10 +1,12 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Register() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
     
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -13,9 +15,14 @@ function Register() {
         // Placeholder for actual register logic
         try {
             console.log('Register attempt:', {name, email, password});
+            navigate('/avatar');
         } catch (error) {
             setError('Register failed. Please try again.');
         }
+    }
+
+    const goToLogin = () => {
+        navigate('/login');
     }
 
     return (
@@ -55,7 +62,7 @@ function Register() {
                     />
                 </div>
                 <button type="submit">Register</button>
-                <button type="button">Go to Login</button>
+                <button type="button" onClick={goToLogin}>Go to Login</button>
             </form>
         </div>
     )
