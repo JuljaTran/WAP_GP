@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
 
 
+
 function Login() {
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
@@ -33,6 +34,10 @@ function Login() {
 
     const goToRegister = () => {
         // Navigate to register page for new users
+        navigate('/register');
+    }
+
+    const goToRegister = () => {
         navigate('/register');
     }
 
