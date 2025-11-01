@@ -1,4 +1,5 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { UserProvider } from "./context/UserContext";
 import AchievementsPage from "./pages/AchievementsPage";
 import AvatarPage from "./pages/AvatarPage";
 import CategoryPage from "./pages/CategoryPage";
@@ -15,7 +16,7 @@ import ResultPage from "./pages/ResultPage";
 function App() {
 
   return (
-    <>
+    <UserProvider>
     <Router>
       <Routes>
         <Route path="/" element={<LoginPage />} />
@@ -30,7 +31,7 @@ function App() {
         <Route path="/leaderboard" element={<LeaderboardPage />} />
       </Routes>
     </Router>
-    </>
+    </UserProvider>
   )
 }
 
