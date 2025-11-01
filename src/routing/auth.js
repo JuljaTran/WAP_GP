@@ -1,5 +1,5 @@
 import express from 'express';
-import users from '../data/users';
+import users from '../data/users.js';
 
 const router = express.Router();
 
@@ -12,7 +12,8 @@ router.post("/register", (req, res) => {
         return res.status(400).json({ error: "User already exists"});
     }
 
-    users.push({username, email, password});
+    const newUser = {id: users.lenght + 1, username, email, password, role:"user"}; 
+    users.push(newUser);
     res.status(201).json({ message: "Registered successfully", username })
 });
 
@@ -23,21 +24,22 @@ router.post("/login", (req, res) => {
     if (!user) {
         return res.status(401).json({ error: "Invalid credentials"});
     }
-    currentUser = user;
+
+    req.session.user = user;
     res.json({ message: "You are logged in", user: {username: user.username, role: user.role} });
 });
 
 //Current user
 router.get("/me", (req, res) => {
-    if (!currentUser) {
+    if (!req.session.user) {
         return res.status(401).json({message: "Not logged in."})
     }
-    res.json(currentUser);
+    res.json(req.session.user);
 });
 
 //Logout
 router.post("/logout", (req, res) => {
-    currentUser = null;
+    req.session.destroy();
     res.json({ message: "Logged out bro"});
 });
 
