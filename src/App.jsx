@@ -3,7 +3,8 @@ import { useState, useEffect } from 'react'
 import Login from './pages/Login.jsx'
 import Register from './pages/Register.jsx'
 import Dashboard from './pages/Dashboard.jsx'
-import Welcome from './pages/Welcome.jsx'
+import { Navigate } from "react-router-dom"
+import Welcome from "./pages/Welcome.jsx"
 
 function App() {
 
@@ -20,10 +21,11 @@ function App() {
     <>
     <Router>
       <Routes>
-        <Route path="/" element={<Welcome />}/>
-        <Route path="/dashboard" element={<Dashboard user={user} />}/>
-        <Route path="/login" element={<Login  setUser={setUser}/>}/>
-        <Route path="/register" element={<Register />}/>
+        <Route path="/" element={<Welcome />} />
+        <Route path="/dashboard" element={user ? <Dashboard user={user} /> : <Navigate to="/login" />}/>
+
+        <Route path="/login" element={<Login setUser={setUser}/>}/>
+        <Route path="/register" element={<Register setUser={setUser} />}/>
       </Routes>
     </Router>
     </>
