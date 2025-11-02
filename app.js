@@ -1,12 +1,14 @@
-import express from 'express'
+import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import api from "./src/routing/api.js";
+
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const app = express()
 const port = 1234
+
 
 app.use(express.json())
 app.use('/api', api)
