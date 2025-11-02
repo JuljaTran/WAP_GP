@@ -37,9 +37,6 @@ function Login() {
         navigate('/register');
     }
 
-    const goToRegister = () => {
-        navigate('/register');
-    }
 
     return (
         <div className="login-container">

@@ -21,15 +21,18 @@ export function UserProvider({ children }) {
 
   // Save current user whenever it changes
   useEffect(() => {
-    if (user && user.username) {
-      localStorage.setItem("quiz_user", JSON.stringify(user));
-    }
+    if (!user?.username) return;
+  const current = localStorage.getItem("quiz_user");
+  const parsed = current ? JSON.parse(current) : null;
+
+  if (JSON.stringify(parsed) !== JSON.stringify(user)) {
+    localStorage.setItem("quiz_user", JSON.stringify(user));
+  }
   }, [user]);
 
   // Register a new user (start with 0 points)
   const register = (username) => {
     const newUser = { username, avatar: null, totalPoints: 0, unlocked: [] };
-    localStorage.setItem("quiz_user", JSON.stringify(newUser));
     setUser(newUser);
   };
 
@@ -46,11 +49,9 @@ export function UserProvider({ children }) {
       }
       // If user not found, create a fresh profile
       const newUser = { username, avatar: null, totalPoints: 0, unlocked: [] };
-      localStorage.setItem("quiz_user", JSON.stringify(newUser));
       setUser(newUser);
     } catch {
       const newUser = { username, avatar: null, totalPoints: 0, unlocked: [] };
-      localStorage.setItem("quiz_user", JSON.stringify(newUser));
       setUser(newUser);
     }
   };
@@ -63,22 +64,30 @@ export function UserProvider({ children }) {
 
   // Add points to the user and check if any animals are unlocked
   const addPoints = (pts) => {
+    let unlockedAnimal = null;
+
    setUser((u) => {
       const newPoints = (u.totalPoints || 0) + pts;
       const unlocks = [...(u.unlocked || [])];
+
       const thresholds = [
         { key: "rabbit", pts: 100 },
         { key: "dog", pts: 500 },
         { key: "lion", pts: 1000 }
       ];
+
       thresholds.forEach((t) => {
-        if (newPoints >= t.pts && !unlocks.includes(t.key)) unlocks.push(t.key);
+        if (newPoints >= t.pts && !unlocks.includes(t.key)) {
+          unlocks.push(t.key);
+          unlockedAnimal = t.key;
+        }
       });
-      const updated = { ...u, totalPoints: newPoints, unlocked: unlocks };
-      localStorage.setItem("quiz_user", JSON.stringify(updated));
-      return updated;
+
+    return{ ...u, totalPoints: newPoints, unlocked: unlocks };
     });
-  };
+    
+  return unlockedAnimal;
+};
 
   return (
     <UserContext.Provider value={{ user, register, login, setAvatar, addPoints, setUserState: setUser }}>

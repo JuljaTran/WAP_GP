@@ -7,11 +7,12 @@ export default function QuizPage(){
   const nav = useNavigate();
   const loc = useLocation();
 
+  const questions = QUESTIONS[category]?.[difficulty] || [];
+  const total = questions.length;
+
   const startIndex = loc.state?.currentIndex ?? 0;
   const startScore = loc.state?.score ?? 0;
 
-  const questions = QUESTIONS[category]?.[difficulty] || [];
-  const total = 10; // ensure at least 10 in questions data
   const [index, setIndex] = useState(startIndex);
   const [score, setScore] = useState(startScore);
 
@@ -20,6 +21,11 @@ export default function QuizPage(){
       nav("/result", { state: { score } });
     }
   }, [index, total, nav, score]);
+
+  useEffect(() => {
+    if (loc.state?.currentIndex !== undefined) setIndex(loc.state.currentIndex);
+    if (loc.state?.score !== undefined) setScore(loc.state.score);
+  }, [loc.state]);
 
   if (!questions || questions.length === 0) {
     return <div className="container card">No questions for this category/difficulty yet.</div>;
@@ -61,7 +67,6 @@ export default function QuizPage(){
             ))}
           </div>
         </div>
-        <div style={{marginTop:12}}>Current score (this quiz): {score}</div>
       </div>
     </div>
   );

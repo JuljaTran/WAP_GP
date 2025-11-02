@@ -10,14 +10,12 @@ const DUMMY = [
 export default function LeaderboardPage(){
   const { user } = useUser();
 
-  // добавяме текущия user ако не е в DUMMY
   const rows = [...DUMMY];
   if(user.username){
     const exists = rows.find(r => r.username === user.username);
-    if(!exists) rows.push({ username: user.username, avatar:user.avatar || "guest", points: user.totalPoints || 0});
+    if(!exists) rows.push({ username: user.username, avatar:user.avatar, points: user.totalPoints || 0});
   }
 
-  // сортираме по точки, най-много първо
   rows.sort((a,b)=>b.points - a.points);
 
   return (
@@ -50,7 +48,7 @@ export default function LeaderboardPage(){
 function avatarEmoji(k){
   switch(k){
     case "fox": return "🦊";
-    case "hare": return "🐇";
+    case "rabbit": return "🐇";
     case "dog": return "🐶";
     case "lion": return "🦁";
     case "eagle": return "🦅";

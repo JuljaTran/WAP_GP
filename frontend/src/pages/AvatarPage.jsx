@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { useUser } from "../context/UserContext";
 
-const AVATARS = ["fox","hare","dog","lion","eagle"];
+const AVATARS = ["fox","rabbit","dog","lion","eagle"];
 
 export default function AvatarPage() {
   const navigate = useNavigate();
@@ -38,7 +38,7 @@ export default function AvatarPage() {
 function avatarEmoji(key){
   switch(key){
     case "fox": return "🦊";
-    case "hare": return "🐇";
+    case "rabbit": return "🐇";
     case "dog": return "🐶";
     case "lion": return "🦁";
     case "eagle": return "🦅";
