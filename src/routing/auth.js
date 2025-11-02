@@ -12,15 +12,17 @@ router.post("/register", (req, res) => {
         return res.status(400).json({ error: "User already exists"});
     }
 
-    const newUser = {id: users.lenght + 1, username, email, password, role:"user"}; 
+    const newUser = {id: users.length + 1, username, email, password, role:"user"}; 
     users.push(newUser);
     res.status(201).json({ message: "Registered successfully", username })
 });
 
 //Login
 router.post("/login", (req, res) => {
+    console.log("Body received:", req.body);
     const {email, password} = req.body;
     const user = users.find(u => u.email === email && u.password === password);
+    console.log("User found:", user);
     if (!user) {
         return res.status(401).json({ error: "Invalid credentials"});
     }

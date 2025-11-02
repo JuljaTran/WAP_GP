@@ -5,11 +5,19 @@ import { fileURLToPath } from 'url';
 import session from 'express-session';
 import api from "./src/routing/api.js";
 import auth from "./src/routing/auth.js";
+import cors from "cors";
+
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const app = express();
 const port = 1234;
+
+// React-Dev-Server - da andere ports verwendet werden
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true
+}));
 
 app.use(express.json());
 

@@ -1,5 +1,3 @@
-import { currentUser } from "../routing/auth.js";
-
 //Rolecheck for api access
 export default function isAdmin(req, res, next) {
     if (!req.session.user) {

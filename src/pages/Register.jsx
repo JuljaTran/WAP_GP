@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import {Link} from "react-router-dom";
 
 function Register() {
     const [username, setUsername] = useState('');
@@ -6,21 +7,39 @@ function Register() {
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
     
-    const handleSubmit = async (e) => {
+    const handleRegister = async (e) => {
         e.preventDefault();
-        setError(null);
+        const url = "http://localhost:1234/api/auth/register";
 
-        // Placeholder for actual register logic
         try {
-            console.log('Register attempt:', {name, email, password});
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({username, email, password})  
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Register failed');
+            }
+
+            const result = await response.json();
+            console.log("Register successful:", result);
+            alert("Registration successful! You can now log in.");
+            
         } catch (error) {
-            setError('Register failed. Please try again.');
+            console.error("Register error:", error.message);
+            setError(error.message);
+
         }
     }
 
     return (
         <div className="login-container">
-            <form onSubmit={handleSubmit} className="login-form">
+            <form onSubmit={handleRegister} className="login-form">
                 <h2>Register</h2>
                 {error && <div className="error-message">{error}</div>}
                 
@@ -31,6 +50,7 @@ function Register() {
                         id="name"
                         value={username}    
                         onChange={(e) => setUsername(e.target.value)}
+                        placeholder='Username'
                         required
                     />
                 </div>
@@ -41,6 +61,7 @@ function Register() {
                         id="email"
                         value={email}    
                         onChange={(e) => setEmail(e.target.value)}
+                        placeholder='Email'
                         required
                     />    
                 </div>
@@ -51,11 +72,14 @@ function Register() {
                     id="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    placeholder='Password'
                     required
                     />
                 </div>
                 <button type="submit">Register</button>
-                <button type="button">Go to Login</button>
+                <button>            
+                    <Link to="/login">Go to Login</Link>
+                </button>
             </form>
         </div>
     )

@@ -1,32 +1,57 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-
-function Login() {
-    const [username, setUsername] = useState('');
+function Login({setUser}) {
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
-    const handleSubmit = async (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
-        const res = await Login({ email, passwprd });
-        if (res.error) {
-            return setError(res.error);
+        const url = "http://localhost:1234/api/auth/login";
+
+        try{
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({email, password})  
+            });
+
+            if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Login failed');
         }
-    }
+
+            const result = await response.json();
+            console.log("Login successful:", result);
+            setUser(result.user);
+            navigate('/dashboard');
+
+        } catch (error) {
+            console.error("Login error:", error.message);
+            setError(error.message);
+        }
+        
+    };
 
     return (
         <div className="login-container">
-            <form onSubmit={handleSubmit} className="login-form">
+            <form onSubmit={handleLogin} className="login-form">
                 <h2>Login</h2>
                 {error && <div className="error-message">{error}</div>}
                 <div className="form-group">
-                    <label htmlFor="name">Name:</label>
+                    <label htmlFor="name">Email:</label>
                     <input
-                        type="text"
+                        type="email"
                         id="name"
-                        value={username}    
-                        onChange={(e) => setUsername(e.target.value)}
+                        value={email}    
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder='Email'
                         required
                     />
                 </div>
@@ -37,6 +62,7 @@ function Login() {
                     id="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    placeholder='Password'
                     required
                     />
                 </div>
