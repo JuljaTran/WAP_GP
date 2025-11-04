@@ -7,6 +7,11 @@ export default function QuizPage(){
   const nav = useNavigate();
   const loc = useLocation();
 
+  const exitQuiz = () => {
+  nav("/home");
+};
+
+
   const questions = QUESTIONS[category]?.[difficulty] || [];
   const total = questions.length;
 
@@ -67,6 +72,11 @@ export default function QuizPage(){
             ))}
           </div>
         </div>
+      </div>
+      <div className="container">
+          <button onClick={exitQuiz} style={{ marginBottom: 20, background: "#f44336", color: "white", padding: "8px 12px", border: "none", borderRadius: 4 }}>
+              Exit Quiz
+          </button>
       </div>
     </div>
   );

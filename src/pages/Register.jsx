@@ -31,7 +31,7 @@ function Register() {
     };
 
     const goToLogin = () => {
-        navigate('/login');
+        navigate('/');
     }
 
 

@@ -56,6 +56,11 @@ export function UserProvider({ children }) {
     }
   };
 
+  // Logout user
+  const logout = () => {
+  setUser(DEFAULT);
+  };
+
   
   // Set user's avatar
   const setAvatar = (avatarKey) => {
@@ -90,7 +95,7 @@ export function UserProvider({ children }) {
 };
 
   return (
-    <UserContext.Provider value={{ user, register, login, setAvatar, addPoints, setUserState: setUser }}>
+    <UserContext.Provider value={{ user, register, login, logout, setAvatar, addPoints, setUserState: setUser }}>
       {children}
     </UserContext.Provider>
   );

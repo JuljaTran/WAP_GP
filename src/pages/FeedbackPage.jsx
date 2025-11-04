@@ -8,6 +8,10 @@ export default function FeedbackPage() {
   const { user, addPoints } = useUser();
   const [unlockedThisQuiz, setUnlockedThisQuiz] = useState(null);
 
+  const exitQuiz = () => {
+  navigate("/home");
+};
+
   if (!state) return <div className="container card">No feedback data.</div>;
 
   const { 
@@ -57,6 +61,11 @@ export default function FeedbackPage() {
         <div style={{ marginTop: 16 }}>
           <button onClick={handleNext}>{nextIndex === totalQuestions ? "End" : "Next"}</button>
         </div>
+      </div>
+      <div className="container">
+          <button onClick={exitQuiz} style={{ marginBottom: 20, background: "#f44336", color: "white", padding: "8px 12px", border: "none", borderRadius: 4 }}>
+              Exit Quiz
+          </button>
       </div>
     </div>
   );

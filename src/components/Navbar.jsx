@@ -1,8 +1,14 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 
 export default function Navbar() {
-  const { user } = useUser();
+  const { user, logout } = useUser();
+  const navigate = useNavigate();
+
+   const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
 
   return (
     <nav style={{ padding: 12, borderBottom: "1px solid #eee", display: "flex", gap: 12, alignItems: "center" }}>
@@ -21,6 +27,7 @@ export default function Navbar() {
         </div>
 
         <div style={{ fontWeight: "bold" }}>Points: {user.totalPoints || 0}</div>
+        <button onClick={handleLogout} style={{ marginLeft: 12 }}>Logout</button>
       </div>
     </nav>
   );
