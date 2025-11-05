@@ -1,7 +1,6 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom"
 import { useState, useEffect } from 'react'
 import { Navigate } from "react-router-dom"
-import { UserProvider } from "./context/UserContext.jsx";
 
 import Login from './pages/Login.jsx'
 import Register from './pages/Register.jsx'
@@ -28,7 +27,6 @@ function App() {
 
   return (
     <>
-    <UserProvider>
     <Router>
       <Routes>
         <Route path="/" element={<Welcome />} />
@@ -44,7 +42,6 @@ function App() {
         <Route path="/leaderboard" element={<LeaderboardPage />} />
       </Routes>
     </Router>
-    </UserProvider> 
     </>
   )
 }
