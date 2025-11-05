@@ -1,43 +1,45 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useUser } from '../context/UserContext';
+import { useState } from 'react'
+import {Link} from "react-router-dom";
 
 function Register() {
-    const [name, setName] = useState('');
+    const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
-    const navigate = useNavigate();
-    const { register } = useUser(); 
     
-    const handleSubmit = async (e) => {
+    const handleRegister = async (e) => {
         e.preventDefault();
-        setError(null);
+        const url = "http://localhost:1234/api/auth/register";
 
-        // Placeholder for actual register logic
-        /*try {
-            console.log('Register attempt:', {name, email, password});
-            navigate('/avatar');
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({username, email, password})  
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Register failed');
+            }
+
+            const result = await response.json();
+            console.log("Register successful:", result);
+            alert("Registration successful! You can now log in.");
+            
         } catch (error) {
-            setError('Register failed. Please try again.');
-        }*/
+            console.error("Register error:", error.message);
+            setError(error.message);
 
-           try {
-            register(name); // create new user with 0 points
-            navigate('/avatar'); // then go to avatar selection
-        } catch (err) {
-            setError('Register failed. Please try again.');
-        } 
-    };
-
-    const goToLogin = () => {
-        navigate('/');
+        }
     }
-
 
     return (
         <div className="login-container">
-            <form onSubmit={handleSubmit} className="login-form">
+            <form onSubmit={handleRegister} className="login-form">
                 <h2>Register</h2>
                 {error && <div className="error-message">{error}</div>}
                 
@@ -46,8 +48,9 @@ function Register() {
                     <input
                         type="text"
                         id="name"
-                        value={name}    
-                        onChange={(e) => setName(e.target.value)}
+                        value={username}    
+                        onChange={(e) => setUsername(e.target.value)}
+                        placeholder='Username'
                         required
                     />
                 </div>
@@ -58,6 +61,7 @@ function Register() {
                         id="email"
                         value={email}    
                         onChange={(e) => setEmail(e.target.value)}
+                        placeholder='Email'
                         required
                     />    
                 </div>
@@ -68,11 +72,14 @@ function Register() {
                     id="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    placeholder='Password'
                     required
                     />
                 </div>
                 <button type="submit">Register</button>
-                <button type="button" onClick={goToLogin}>Go to Login</button>
+                <button>            
+                    <Link to="/login">Go to Login</Link>
+                </button>
             </form>
         </div>
     )

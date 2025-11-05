@@ -1,15 +1,37 @@
+//file 
 import express from 'express'
 import path from 'path';
 import { fileURLToPath } from 'url';
+import session from 'express-session';
 import api from "./src/routing/api.js";
+import auth from "./src/routing/auth.js";
+import cors from "cors";
+
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const app = express()
-const port = 1234
+const app = express();
+const port = 1234;
 
-app.use(express.json())
-app.use('/api', api)
+// React-Dev-Server - da andere ports verwendet werden
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true
+}));
+
+app.use(express.json());
+
+app.use(session({
+  secret:'geheim',
+  resave: false,
+  saveUninitialized: false
+}));
+
+//protected api route
+app.use('/api/auth', auth);
+app.use('/api', api);
+
+
 
 app.use(express.static('dist'));
 app.use(function(req, res) {

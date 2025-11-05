@@ -1,55 +1,57 @@
-import { useState } from 'react';
+import { useState } from 'react'
+import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { useUser } from '../context/UserContext';
 
-
-
-function Login() {
-    const [name, setName] = useState('');
+function Login({setUser}) {
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
     const navigate = useNavigate();
-    const { login } = useUser();
-    
-    const handleSubmit = async (e) => {
+
+    const handleLogin = async (e) => {
         e.preventDefault();
-        setError(null);
+        const url = "http://localhost:1234/api/auth/login";
 
-        // Placeholder for actual login logic
-        /*try {
-            console.log('Login attempt:', {name, password});
-             navigate('/home');
+        try{
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({email, password})  
+            });
+
+            if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Login failed');
+        }
+
+            const result = await response.json();
+            console.log("Login successful:", result);
+            setUser(result.user);
+            navigate('/dashboard');
+
         } catch (error) {
-            setError('Login failed. Please try again.');
+            console.error("Login error:", error.message);
+            setError(error.message);
         }
-    }*/
-
-        try {
-            login(name); 
-            navigate('/home'); 
-        } catch (err) {
-            setError('Login failed. Please try again.');
-        }
+        
     };
-
-    const goToRegister = () => {
-        // Navigate to register page for new users
-        navigate('/register');
-    }
-
 
     return (
         <div className="login-container">
-            <form onSubmit={handleSubmit} className="login-form">
+            <form onSubmit={handleLogin} className="login-form">
                 <h2>Login</h2>
                 {error && <div className="error-message">{error}</div>}
                 <div className="form-group">
-                    <label htmlFor="name">Name:</label>
+                    <label htmlFor="name">Email:</label>
                     <input
-                        type="text"
+                        type="email"
                         id="name"
-                        value={name}    
-                        onChange={(e) => setName(e.target.value)}
+                        value={email}    
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder='Email'
                         required
                     />
                 </div>
@@ -60,11 +62,14 @@ function Login() {
                     id="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    placeholder='Password'
                     required
                     />
                 </div>
                 <button type="submit">Login</button>
-                <button type="button" onClick={goToRegister}>Go to Register</button>
+                <button>            
+                    <Link to="/register">Go to register</Link>
+                </button>
             </form>
         </div>
     )

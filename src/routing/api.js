@@ -1,9 +1,12 @@
 import express from 'express'
 import questions from '../api/questions.js'
+import isAdmin from '../middleware/roleCheck.js'
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
+
+//geschützte admin route
+router.get('/', isAdmin, (req, res) => {
     res.json(questions)
 })
 
