@@ -30,7 +30,7 @@ function Login({setUser}) {
             const result = await response.json();
             console.log("Login successful:", result);
             setUser(result.user);
-            navigate('/dashboard');
+            navigate('/home');
 
         } catch (error) {
             console.error("Login error:", error.message);

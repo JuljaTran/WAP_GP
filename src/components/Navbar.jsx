@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useUser } from "../context/UserContext";
+import { useUser } from "../context/UserContext.jsx";
 
 export default function Navbar() {
   const { user, logout } = useUser();
