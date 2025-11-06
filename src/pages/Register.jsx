@@ -1,15 +1,11 @@
 import { useState } from 'react'
 import {Link} from "react-router-dom";
-import { useNavigate } from 'react-router-dom';
 
-function Register({setUser}) {
+function Register() {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
-
-    const navigate = useNavigate();
-
     
     const handleRegister = async (e) => {
         e.preventDefault();
@@ -32,8 +28,7 @@ function Register({setUser}) {
 
             const result = await response.json();
             console.log("Register successful:", result);
-            setUser(result.user);
-            navigate('/avatar');
+            alert("Registration successful! You can now log in.");
             
         } catch (error) {
             console.error("Register error:", error.message);

@@ -10,4 +10,3 @@ export default function isAdmin(req, res, next) {
 
     next();
 }
-s

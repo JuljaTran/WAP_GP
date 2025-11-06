@@ -16,7 +16,7 @@ import ResultPage from "./pages/ResultPage";
 
 function App() {
 
-  const [user, setUser] = useState(undefined);
+  const [user, setUser] = useState(null);
 
   useEffect(() => { 
     fetch("/api/auth/me", { credentials: "include" })
@@ -25,10 +25,6 @@ function App() {
     .catch(() => setUser(null));
   }, []);
 
-  if (user === undefined) {
-    return <div>Loading...</div>;
-  }
-  
   return (
     <>
     <Router>
