@@ -1,18 +1,20 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useUser } from '../context/UserContext';
 
-function Login({setUser}) {
+
+function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
     const navigate = useNavigate();
+    const { login } = useUser();
 
     const handleLogin = async (e) => {
         e.preventDefault();
         const url = "http://localhost:1234/api/auth/login";
 
-        try{
+       try{
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {
@@ -29,14 +31,13 @@ function Login({setUser}) {
 
             const result = await response.json();
             console.log("Login successful:", result);
-            setUser(result.user);
-            navigate('/dashboard');
+            login(result.user);
+            navigate('/home');
 
         } catch (error) {
             console.error("Login error:", error.message);
             setError(error.message);
         }
-        
     };
 
     return (

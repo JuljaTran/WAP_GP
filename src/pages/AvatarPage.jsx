@@ -6,10 +6,25 @@ const AVATARS = ["fox","rabbit","dog","lion","eagle"];
 
 export default function AvatarPage() {
   const navigate = useNavigate();
-  const { setAvatar } = useUser();
+  const { setAvatar, user } = useUser();
 
-  const choose = (a) => {
-    setAvatar(a);
+  const choose = async (a) => {
+    try{
+      const response = await fetch("http://localhost:1234/api/auth/user/avatar", {
+        method: "PATCH",
+        headers: {"Content-Type": "application/json"},
+        credentials: "include",
+        body: JSON.stringify({ avatar: a })
+      });
+      if (!response.ok) {
+        throw new Error("Failed to update avatar");
+      }
+      setAvatar(a);
+      navigate("/home");
+    } catch (error) {
+      console.error("Error updating avatar:", error);
+      alert("Could not update avatar. Please try again.");
+    }
   };
 
   return (

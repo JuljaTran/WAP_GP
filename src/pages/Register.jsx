@@ -1,11 +1,15 @@
-import { useState } from 'react'
-import {Link} from "react-router-dom";
+import { useState } from 'react';
+import { Link, useNavigate } from "react-router-dom";
+import { useUser } from '../context/UserContext.jsx';
 
 function Register() {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
+
+    const navigate = useNavigate();
+    const { register, login } = useUser();
     
     const handleRegister = async (e) => {
         e.preventDefault();
@@ -29,9 +33,13 @@ function Register() {
             const result = await response.json();
             console.log("Register successful:", result);
             alert("Registration successful! You can now log in.");
+
+            login(result.user);
+
+            navigate('/avatar');
             
         } catch (error) {
-            console.error("Register error:", error.message);
+            console.error("Register/Login error:", error.message);
             setError(error.message);
 
         }
