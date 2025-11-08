@@ -1,11 +1,12 @@
 //file 
-import express from 'express'
+import cors from "cors";
+import express from 'express';
+import session from 'express-session';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import session from 'express-session';
 import api from "./src/routing/api.js";
 import auth from "./src/routing/auth.js";
-import cors from "cors";
+
 
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -24,7 +25,7 @@ app.use(express.json());
 app.use(session({
   secret:'geheim',
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
 }));
 
 //protected api route

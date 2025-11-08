@@ -37,24 +37,14 @@ export function UserProvider({ children }) {
   };
 
   // Login an existing user
-  const login = (username) => {
-     try {
-      const raw = localStorage.getItem("quiz_user");
-      if (raw) {
-        const saved = JSON.parse(raw);
-        if (saved.username === username) {
-          setUser(saved);
-          return;
-        }
-      }
-      // If user not found, create a fresh profile
-      const newUser = { username, avatar: null, totalPoints: 0, unlocked: [] };
-      setUser(newUser);
-    } catch {
-      const newUser = { username, avatar: null, totalPoints: 0, unlocked: [] };
-      setUser(newUser);
-    }
-  };
+  const login = (userData) => {
+    if (!userData || !userData.username) {
+    setUser(DEFAULT); // fallback guest
+    return;
+}
+
+  setUser(userData);
+};
 
   // Logout user
   const logout = () => {
@@ -68,29 +58,35 @@ export function UserProvider({ children }) {
   };
 
   // Add points to the user and check if any animals are unlocked
-  const addPoints = (pts) => {
+  const addPoints = async (pts) => {
     let unlockedAnimal = null;
 
-   setUser((u) => {
-      const newPoints = (u.totalPoints || 0) + pts;
-      const unlocks = [...(u.unlocked || [])];
-
-      const thresholds = [
-        { key: "rabbit", pts: 100 },
-        { key: "dog", pts: 500 },
-        { key: "lion", pts: 1000 }
-      ];
-
-      thresholds.forEach((t) => {
-        if (newPoints >= t.pts && !unlocks.includes(t.key)) {
-          unlocks.push(t.key);
-          unlockedAnimal = t.key;
-        }
-      });
-
-    return{ ...u, totalPoints: newPoints, unlocked: unlocks };
+    try {
+    const response = await fetch("http://localhost:1234/api/auth/user/points", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ points: pts })
     });
-    
+
+    if (!response.ok) {
+      throw new Error("Failed to update points");
+    }
+
+    const data = await response.json();
+
+    setUser(u => ({
+      ...u,
+      totalPoints: data.totalPoints,
+      unlocked: data.unlocked
+    }));
+
+    const lastUnlock = data.unlocked[data.unlocked.length - 1];
+    unlockedAnimal = lastUnlock || null;
+
+  } catch (err) {
+    console.error("Error adding points:", err);
+  }
   return unlockedAnimal;
 };
 
