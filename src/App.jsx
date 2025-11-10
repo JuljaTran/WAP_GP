@@ -1,5 +1,7 @@
+import { CssBaseline, ThemeProvider } from "@mui/material"
 import { useEffect, useState } from 'react'
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom"
+import theme from "./theme.js"
 
 import AchievementsPage from "./pages/AchievementsPage"
 import AvatarPage from "./pages/AvatarPage"
@@ -25,7 +27,8 @@ function App() {
   }, []);
 
   return (
-    <>
+    <ThemeProvider theme={theme}>
+    <CssBaseline />
     <Router>
       <Routes>
         <Route path="/" element={<Welcome />} />
@@ -41,7 +44,7 @@ function App() {
         <Route path="/leaderboard" element={<LeaderboardPage />} />
       </Routes>
     </Router>
-    </>
+    </ThemeProvider>
   )
 }
 

@@ -1,3 +1,4 @@
+import { Alert, Box, Button, Container, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { useUser } from '../context/UserContext.jsx';
@@ -46,51 +47,129 @@ function Register() {
     }
 
     return (
-        <div className="login-container">
-            <form onSubmit={handleRegister} className="login-form">
-                <h2>Register</h2>
-                {error && <div className="error-message">{error}</div>}
-                
-                <div className="form-group">
-                    <label htmlFor="name">Name:</label>
-                    <input
-                        type="text"
-                        id="name"
-                        value={username}    
-                        onChange={(e) => setUsername(e.target.value)}
-                        placeholder='Username'
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="email">Email:</label>
-                    <input
-                        type="email"
-                        id="email"
-                        value={email}    
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder='Email'
-                        required
-                    />    
-                </div>
-                <div className="form-group">
-                    <label htmlFor="password">Password:</label>
-                    <input
-                    type="password"
-                    id="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder='Password'
-                    required
-                    />
-                </div>
-                <button type="submit">Register</button>
-                <button>            
-                    <Link to="/login">Go to Login</Link>
-                </button>
-            </form>
-        </div>
-    )
+        <Box
+            sx={{
+            width: '100vw',
+            minHeight: '100vh',
+            bgcolor: '#FFFFFF',
+            position: 'relative',
+            overflow: 'hidden',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            p: 4,
+        }}
+    >
+
+      {/* Background elements */}
+      <Box
+        component="img"
+        src="/Assets/top_left_element.png"
+        alt="Top left spheres"
+        sx={{ position: 'absolute', top: 0, left: 0, width: 200, height: 'auto', zIndex: 0 }}
+      />
+      <Box
+        component="img"
+        src="/Assets/bottom_right_element.png"
+        alt="Bottom right spheres"
+        sx={{ position: 'absolute', bottom: 0, right: 0, width: 150, height: 'auto', zIndex: 0 }}
+      />
+      <Box
+        component="img"
+        src="/Assets/panda_bottom.png"
+        alt="Panda"
+        sx={{ position: 'absolute', width: 200, bottom: 0, height: 'auto', zIndex: 1 }}
+      />
+
+    {/* Register form */}
+    <Container
+        maxWidth="sm"
+        sx={{ zIndex: 2 }}
+    >
+
+    <Typography variant="h3" sx={{ fontWeight: 400, mb: 5 }}>
+          Hello, <Box component="span" sx={{ fontWeight: 700 }}>Register Now!</Box>
+    </Typography>
+
+    {error && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+            {error}
+        </Alert>
+    )}
+
+    <Box
+        component="form"
+        onSubmit={handleRegister}
+        sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}
+    >
+
+    <TextField
+        label="Username"
+        type="text"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        placeholder="Enter your username"
+        required
+        fullWidth
+        InputLabelProps={{ style: { color: '#032051' } }}
+    />
+
+    <TextField
+        label="Email"
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="Enter your email"
+        required
+        fullWidth
+        InputLabelProps={{ style: { color: '#032051' } }}
+    />
+
+    <TextField
+        label="Password"
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        placeholder="Enter your password"
+        required
+        fullWidth
+        InputLabelProps={{ style: { color: '#032051' } }}
+    />
+
+    <Button
+        type="submit"
+        variant="contained"
+        sx={{
+            width: '100%',
+            borderRadius: 30,
+            py: 1.5,
+            fontSize: '1.2rem',
+            fontWeight: 600,
+            backgroundColor: '#669FFD',
+            color: '#FFFFFF',
+            '&:hover': { backgroundColor: '#557EDC', color: '#FFFFFF' },
+        }}
+    >   
+        Register
+    </Button>
+
+    <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1, mt: 1 }}>
+
+    <Typography sx={{ fontWeight: 500 }}>Already have an account?</Typography>
+
+    <Button
+        component={Link}
+        to="/login"
+        variant="text"
+        sx={{ color: '#80B0FF', textTransform: 'none', fontWeight: 600 }}
+    >
+        Log In
+            </Button>
+          </Box>
+        </Box>
+    </Container>
+    </Box>
+    );
 }
 
 export default Register;

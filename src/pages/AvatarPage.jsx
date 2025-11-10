@@ -50,14 +50,13 @@ export default function AvatarPage() {
   );
 }
 
-function avatarEmoji(key){
-  switch(key){
-    case "fox": return "🦊";
-    case "rabbit": return "🐇";
-    case "dog": return "🐶";
-    case "lion": return "🦁";
-    case "eagle": return "🦅";
-    default: return "🙂";
-  }
+function avatarEmoji(key) {
+   switch (key) { 
+    case "fox": return "🦊"; 
+    case "rabbit": return "🐇"; 
+    case "dog": return "🐶"; 
+    case "lion": return "🦁"; 
+    case "eagle": return "🦅"; 
+    default: return "🙂"; 
+  } 
 }
-

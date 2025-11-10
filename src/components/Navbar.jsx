@@ -22,7 +22,7 @@ export default function Navbar() {
             <div style={{ width: "36px", height: "36px", fontSize: "20px" }}>
               {avatarEmoji(user.avatar)}
             </div>
-          )}
+    )}
           <span>{user?.username || "Guest"}</span>
         </div>
 
@@ -34,12 +34,14 @@ export default function Navbar() {
 }
 
 function avatarEmoji(key) {
-  switch (key) {
-    case "fox": return "🦊";
-    case "hare": return "🐇";
-    case "dog": return "🐶";
-    case "lion": return "🦁";
-    case "eagle": return "🦅";
-    default: return "🙂";
-  }
+   switch (key) { 
+    case "fox": return "🦊"; 
+    case "rabbit": return "🐇"; 
+    case "dog": return "🐶"; 
+    case "lion": return "🦁"; 
+    case "eagle": return "🦅"; 
+    default: return "🙂"; 
+  } 
 }
+
+
