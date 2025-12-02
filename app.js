@@ -1,15 +1,15 @@
-//file 
+
 import cors from "cors";
 import express from 'express';
 import session from 'express-session';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import api from "./src/routing/api.js";
-import auth from "./src/routing/auth.js";
 import { MongoClient, ServerApiVersion } from 'mongodb';
 import 'dotenv/config';
-import './'
 import oAuthModel from "./src/models/oAuthModel.js";
+import ExpressOAuthServer from "express-oauth-server";
+import register from './src/routing/register.js'
 
 const connectionString = process.env.MONGODB_CONNECTION_STRING;
 
@@ -29,7 +29,6 @@ try {
   //add TTL indexes -expiration dates to remove expired tokens
   db.collection('token').createIndex({ accessTokenExpiresAt: 1}, { expireAfterSeconds: 0});
   db.collection('token').createIndex({ refreshTokenExpiresAt: 1}, { expireAfterSeconds: 0});
-  db.collection('token').createIndex({ emailTokenExpiresAt: 1}, { expireAfterSeconds: 0}); //theretisch, wenn es einen emailToken geben würde
   
   const oauth = new ExpressOAuthServer({ model: oAuthModel(db) }); //create oauth middleware
   
@@ -41,25 +40,26 @@ try {
     credentials: true
   }));
 
-  app.use(express.json());
+  //app.use(express.json());
 
 
-  //Created Session for testing
+  /*Created Session for testing
   app.use(session({
     secret:'geheim',
     resave: false,
     saveUninitialized: false,
   }));
-
-  //backend routes
-  app.use('/api/token', oauth.token({ requireClientAuthentication: {password: false, refresh_token: false }}));
-  app.use('/api/register', register);
-  app.use('/api', oauth.authenticate(), api)
-
-  /*protected api route
+  
+  protected api route 
   app.use('/api/auth', auth);
   app.use('/api', api);
   */
+
+  //backend routes
+  app.use('/api/register', register);
+  app.use('/api/token', oauth.token({ requireClientAuthentication: {password: false, refresh_token: false }}));
+  app.use('/api', oauth.authenticate(), api)
+
 
   app.use(express.static('dist'));
   app.use(function(req, res) {
