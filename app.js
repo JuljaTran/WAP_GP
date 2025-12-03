@@ -1,7 +1,6 @@
 
 import cors from "cors";
 import express from 'express';
-import session from 'express-session';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import api from "./src/routing/api.js";
@@ -41,19 +40,17 @@ try {
   }));
 
   //app.use(express.json());
-
-
   /*Created Session for testing
   app.use(session({
     secret:'geheim',
     resave: false,
     saveUninitialized: false,
   }));
-  
-  protected api route 
-  app.use('/api/auth', auth);
-  app.use('/api', api);
-  */
+   */
+
+  //protected api route 
+  app.use('/api/protected', oauth.authenticate()); 
+ 
 
   //backend routes
   app.use('/api/register', register);

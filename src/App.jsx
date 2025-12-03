@@ -3,6 +3,7 @@ import { Route, BrowserRouter as Router, Routes } from "react-router-dom"
 
 import AchievementsPage from "./pages/AchievementsPage"
 import AvatarPage from "./pages/AvatarPage"
+import Activate from './pages/Activate'
 import CategoryPage from "./pages/CategoryPage"
 import FeedbackPage from "./pages/FeedbackPage"
 import HomePage from "./pages/HomePage"
@@ -18,7 +19,7 @@ function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => { 
-    fetch("/api/auth/me", { credentials: "include" })
+    fetch("/api", { credentials: "include" })
     .then(res => res.json())
     .then(data => setUser(data))
     .catch(() => setUser(null));
@@ -31,6 +32,7 @@ function App() {
         <Route path="/" element={<Welcome />} />
         <Route path="/login" element={<Login setUser={setUser}/>}/>
         <Route path="/register" element={<Register setUser={setUser} />}/>
+        <Route path="/activate/:token" element={<Activate />} />
         <Route path="/avatar" element={<AvatarPage />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/category/:category" element={<CategoryPage />} />

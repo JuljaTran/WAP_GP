@@ -13,7 +13,7 @@ function Register() {
     
     const handleRegister = async (e) => {
         e.preventDefault();
-        const url = "http://localhost:1234/api/auth/register";
+        const url = "http://localhost:1234/api/register";
 
         try {
             const response = await fetch(url, {
@@ -32,11 +32,9 @@ function Register() {
 
             const result = await response.json();
             console.log("Register successful:", result);
-            alert("Registration successful! You can now log in.");
+            alert("Registration successful! Check your email (console) for the activation link.");
 
-            login(result.user);
-
-            navigate('/avatar');
+            navigate('/login');
             
         } catch (error) {
             console.error("Register/Login error:", error.message);

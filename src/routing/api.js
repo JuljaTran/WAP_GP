@@ -80,8 +80,8 @@ router.post('/atlas', async (req, res) => {
 })
 
 //geschützte admin route
-router.get('/', isAdmin, (req, res) => {
-    res.json(questions)
+router.get('/admin-data', isAdmin, (req, res) => {
+    res.json({ secret: "Nur für Admins sichtbar"})
 })
 
 router.get('/:amount/:difficulty', (req, res) => {
