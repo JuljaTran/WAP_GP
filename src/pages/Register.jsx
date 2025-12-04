@@ -21,7 +21,6 @@ function Register() {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                credentials: 'include',
                 body: JSON.stringify({username, email, password})  
             });
 
@@ -32,14 +31,10 @@ function Register() {
 
             const result = await response.json();
             console.log("Register successful:", result);
-            alert("Registration successful! Check your email (console) for the activation link.");
-
-            navigate('/login');
-            
+            alert("Registration successful! Check your email (console) for the activation link.");          
         } catch (error) {
             console.error("Register/Login error:", error.message);
             setError(error.message);
-
         }
     }
 
@@ -70,17 +65,6 @@ function Register() {
                         placeholder='Email'
                         required
                     />    
-                </div>
-                <div className="form-group">
-                    <label htmlFor="password">Password:</label>
-                    <input
-                    type="password"
-                    id="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder='Password'
-                    required
-                    />
                 </div>
                 <button type="submit">Register</button>
                 <button>            

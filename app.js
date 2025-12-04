@@ -8,7 +8,8 @@ import { MongoClient, ServerApiVersion } from 'mongodb';
 import 'dotenv/config';
 import oAuthModel from "./src/models/oAuthModel.js";
 import ExpressOAuthServer from "express-oauth-server";
-import register from './src/routing/register.js'
+import register from './src/routing/register.js';
+import login from './src/routing/login.js';
 
 const connectionString = process.env.MONGODB_CONNECTION_STRING;
 
@@ -39,27 +40,19 @@ try {
     credentials: true
   }));
 
-  //app.use(express.json());
-  /*Created Session for testing
-  app.use(session({
-    secret:'geheim',
-    resave: false,
-    saveUninitialized: false,
-  }));
-   */
-
   //protected api route 
   app.use('/api/protected', oauth.authenticate()); 
  
 
   //backend routes
   app.use('/api/register', register);
+  app.use('/api/login', login);
   app.use('/api/token', oauth.token({ requireClientAuthentication: {password: false, refresh_token: false }}));
   app.use('/api', oauth.authenticate(), api)
 
 
   app.use(express.static('dist'));
-  app.use(function(req, res) {
+  app.use((req, res) => {
     res.sendFile(path.join(__dirname, './dist/index.html'));
   });
 

@@ -12,12 +12,12 @@ function Activate() {
     const handleActivate = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch(`http://localhost:1234/activate/${token}`, {
+            //const response = await fetch(`http://localhost:1234/api/register/${token}`, {
+            const response = await fetch(`http://localhost:1234/api/register/${token}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                credentials: 'include',
                 body: JSON.stringify({ password })
             });
             
@@ -28,7 +28,7 @@ function Activate() {
 
             setSuccess(true);
             alert('Account activated! You can now log in.');
-            navigate('/HomePage');
+            navigate('/login');
 
         } catch (error) {
             console.error("Activation error:", error.message);
