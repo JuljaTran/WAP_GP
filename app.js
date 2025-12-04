@@ -8,8 +8,10 @@ import { MongoClient, ServerApiVersion } from 'mongodb';
 import 'dotenv/config';
 import oAuthModel from "./src/models/oAuthModel.js";
 import ExpressOAuthServer from "express-oauth-server";
+
 import register from './src/routing/register.js';
 import login from './src/routing/login.js';
+import user from './src/routing/user.js';
 
 const connectionString = process.env.MONGODB_CONNECTION_STRING;
 
@@ -43,7 +45,9 @@ try {
   //protected api route 
   app.use('/api/protected', oauth.authenticate()); 
  
-
+  //user 
+  app.use('/api/user', user);
+  
   //backend routes
   app.use('/api/register', register);
   app.use('/api/login', login);
