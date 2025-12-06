@@ -1,18 +1,23 @@
-//file 
+
 import cors from "cors";
 import express from 'express';
-import session from 'express-session';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import api from "./src/routing/api.js";
-import auth from "./src/routing/auth.js";
 import { MongoClient, ServerApiVersion } from 'mongodb';
 import 'dotenv/config';
+import oAuthModel from "./src/models/oAuthModel.js";
+import ExpressOAuthServer from "express-oauth-server";
+import register from './src/routing/register.js';
+import login from './src/routing/login.js';
 
 const connectionString = process.env.MONGODB_CONNECTION_STRING;
 
 const app = express();
 const port = 1234;
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 try {
   const client = new MongoClient(connectionString);
@@ -21,6 +26,12 @@ try {
 
   app.set('db', db);
 
+  //add TTL indexes -expiration dates to remove expired tokens
+  db.collection('token').createIndex({ accessTokenExpiresAt: 1}, { expireAfterSeconds: 0});
+  db.collection('token').createIndex({ refreshTokenExpiresAt: 1}, { expireAfterSeconds: 0});
+  
+  const oauth = new ExpressOAuthServer({ model: oAuthModel(db) }); //create oauth middleware
+  
   const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
   // React-Dev-Server - da andere ports verwendet werden
@@ -29,20 +40,19 @@ try {
     credentials: true
   }));
 
-  app.use(express.json());
+  //protected api route 
+  app.use('/api/protected', oauth.authenticate()); 
+ 
 
-  app.use(session({
-    secret:'geheim',
-    resave: false,
-    saveUninitialized: false,
-  }));
+  //backend routes
+  app.use('/api/register', register);
+  app.use('/api/login', login);
+  app.use('/api/token', oauth.token({ requireClientAuthentication: {password: false, refresh_token: false }}));
+  app.use('/api', oauth.authenticate(), api)
 
-  //protected api route
-  app.use('/api/auth', auth);
-  app.use('/api', api);
 
   app.use(express.static('dist'));
-  app.use(function(req, res) {
+  app.use((req, res) => {
     res.sendFile(path.join(__dirname, './dist/index.html'));
   });
 

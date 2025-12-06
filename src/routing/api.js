@@ -5,8 +5,45 @@ import isAdmin from '../middleware/roleCheck.js'
 
 const router = express.Router();
 
-//Testrouten für MongoDB-Atlas
 
+async function writeAccess(req, res, next) {
+    const db = req.app.get('db');
+
+    const user = await db.collection('user').findOne({ _id: res.locals?.oauth?.token?.user?.user_id });
+    if (user?.permission?.write) {
+        res.locals.user = user;
+        next();
+    } else {
+        res.status(403).send();
+    }
+}
+
+router.post('/todo', writeAccess, async (req, res) => {
+    try {
+        const db = req.app.get('db');
+        const insertion = await db.collection('todo').insertOne({ 
+            ...req.body,
+            creator_id: res.locals.user._id,
+        });
+
+        if (insertion.acknowledged) {
+            const todo = await db.collection('todo').findOne({ _id: insertion.insertedId});
+
+            if (todo) {
+                res.status(201).json(todo);
+            } else {
+                res.status(404).send();
+            }
+        } else {
+            res.status(500).send();
+        }
+    } catch(err) {
+        console.error(err);
+        res.status(500).send();
+    }
+})
+
+//Testrouten für MongoDB-Atlas
 router.get('/atlas', async (req, res) => {
     try {
         const db = req.app.get('db');
@@ -43,8 +80,8 @@ router.post('/atlas', async (req, res) => {
 })
 
 //geschützte admin route
-router.get('/', isAdmin, (req, res) => {
-    res.json(questions)
+router.get('/admin-data', isAdmin, (req, res) => {
+    res.json({ secret: "Nur für Admins sichtbar"})
 })
 
 router.get('/:amount/:difficulty', (req, res) => {
