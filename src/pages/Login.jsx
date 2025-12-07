@@ -12,10 +12,10 @@ function Login() {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        const url = "http://localhost:1234/api/login";
+        //const url = "http://localhost:1234/api/login";
 
        try{
-            const response = await fetch(url, {
+            const response = await fetch("/api/login", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

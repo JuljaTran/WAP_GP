@@ -1,7 +1,7 @@
-import express from 'express';
-import { v4 } from 'uuid';
 import bcrypt from 'bcrypt';
+import express from 'express';
 import { ObjectId } from 'mongodb';
+import { v4 } from 'uuid';
 
 const router = express.Router();
 
@@ -63,7 +63,8 @@ router.post('/', async(req, res) => {
             user_id: userProfile.insertedId,
         });
         
-        console.log(`Activation link: http://localhost:1234/activate/${token}`);
+        //console.log(`Activation link: http://localhost:1234/activate/${token}`);
+        console.log(`Activation link: http://localhost:5173/activate/${token}`);
 
         res.status(201).json({ message: "User created. Check console for activation link." });
 

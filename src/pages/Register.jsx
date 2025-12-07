@@ -1,27 +1,26 @@
 import { useState } from 'react';
-import { Link, useNavigate } from "react-router-dom";
-import { useUser } from '../context/UserContext.jsx';
+import { Link } from "react-router-dom";
 
 function Register() {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    //const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
 
-    const navigate = useNavigate();
-    const { register, login } = useUser();
+    /*const navigate = useNavigate();
+    const { register, login } = useUser();*/
     
     const handleRegister = async (e) => {
         e.preventDefault();
-        const url = "http://localhost:1234/api/register";
+        //const url = "http://localhost:1234/api/register";
 
         try {
-            const response = await fetch(url, {
+            const response = await fetch("/api/register", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({username, email, password})  
+                body: JSON.stringify({username, email})  
             });
 
             if (!response.ok) {
@@ -29,14 +28,18 @@ function Register() {
                 throw new Error(errorData.error || 'Register failed');
             }
 
-            const result = await response.json();
+            /*const result = await response.json();
             console.log("Register successful:", result);
             alert("Registration successful! Check your email (console) for the activation link.");          
         } catch (error) {
             console.error("Register/Login error:", error.message);
             setError(error.message);
+        }*/
+       alert("Registration successful! Check the console for activation link.");
+        } catch (err) {
+            setError(err.message);
         }
-    }
+    };
 
     return (
         <div className="login-container">

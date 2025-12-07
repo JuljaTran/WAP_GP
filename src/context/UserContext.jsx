@@ -19,84 +19,80 @@ export function UserProvider({ children }) {
     }
   });
 
-  // Save current user whenever it changes
+  // Save user to localStorage
   useEffect(() => {
     if (!user?.username) return;
-  const current = localStorage.getItem("quiz_user");
-  const parsed = current ? JSON.parse(current) : null;
-
-  if (JSON.stringify(parsed) !== JSON.stringify(user)) {
     localStorage.setItem("quiz_user", JSON.stringify(user));
-  }
   }, [user]);
 
-  // Register a new user (start with 0 points)
+  // Register a new user
   const register = (username) => {
     const newUser = { username, avatar: null, totalPoints: 0, unlocked: [] };
     setUser(newUser);
   };
 
-  // Login an existing user
+  // Login
   const login = (userData) => {
     if (!userData || !userData.username) {
-    setUser(DEFAULT); // fallback guest
-    return;
-}
+      setUser(DEFAULT);
+      return;
+    }
 
-  setUser(userData);
-};
-
-  // Logout user
-  const logout = () => {
-  setUser(DEFAULT);
+    setUser({
+      username: userData.username,
+      avatar: userData.avatar ?? null,
+      totalPoints: userData.totalPoints ?? 0,
+      unlocked: userData.unlocked ?? []
+    });
   };
 
-  
-  // Set user's avatar
+  // Logout
+  const logout = () => {
+    setUser(DEFAULT);
+    localStorage.removeItem("quiz_user");
+  };
+
+  // Set avatar locally
   const setAvatar = (avatarKey) => {
     setUser((u) => ({ ...u, avatar: avatarKey }));
   };
 
-  // Add points to the user and check if any animals are unlocked
-  const addPoints = async (pts) => {
-    let unlockedAnimal = null;
+  // Add points locally
+  const addPoints = (pts) => {
+    setUser((u) => {
+      if (!u) return u;
 
-    try {
-    const response = await fetch("http://localhost:1234/api/auth/user/points", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({ points: pts })
+      const newTotal = (u.totalPoints || 0) + pts;
+
+      const thresholds = [
+        { key: "rabbit", pts: 100 },
+        { key: "dog", pts: 500 },
+        { key: "lion", pts: 1000 }
+      ];
+
+      const newUnlocked = [...(u.unlocked || [])];
+
+      thresholds.forEach(t => {
+        if (newTotal >= t.pts && !newUnlocked.includes(t.key)) {
+          newUnlocked.push(t.key);
+        }
+      });
+
+      return {
+        ...u,
+        totalPoints: newTotal,
+        unlocked: newUnlocked
+      };
     });
-
-    if (!response.ok) {
-      throw new Error("Failed to update points");
-    }
-
-    const data = await response.json();
-
-    setUser(u => ({
-      ...u,
-      totalPoints: data.totalPoints,
-      unlocked: data.unlocked
-    }));
-
-    const lastUnlock = data.unlocked[data.unlocked.length - 1];
-    unlockedAnimal = lastUnlock || null;
-
-  } catch (err) {
-    console.error("Error adding points:", err);
-  }
-  return unlockedAnimal;
-};
+  };
 
   return (
-    <UserContext.Provider value={{ user, register, login, logout, setAvatar, addPoints, setUserState: setUser }}>
+    <UserContext.Provider value={{ user, register, login, logout, setAvatar, addPoints }}>
       {children}
     </UserContext.Provider>
   );
 }
 
-export function useUser() { 
-  return useContext(UserContext); 
+export function useUser() {
+  return useContext(UserContext);
 }

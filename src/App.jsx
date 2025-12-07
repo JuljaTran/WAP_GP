@@ -1,22 +1,25 @@
-import { useEffect, useState } from 'react'
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom"
+import { useEffect, useState } from "react";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
-import AchievementsPage from "./pages/AchievementsPage"
-import AvatarPage from "./pages/AvatarPage"
-import Activate from './pages/Activate'
-import CategoryPage from "./pages/CategoryPage"
-import FeedbackPage from "./pages/FeedbackPage"
-import HomePage from "./pages/HomePage"
-import LeaderboardPage from "./pages/LeaderboardPage"
-import Login from './pages/Login.jsx'
-import QuizPage from "./pages/QuizPage"
-import Register from './pages/Register.jsx'
-import ResultPage from "./pages/ResultPage"
-import Welcome from "./pages/Welcome.jsx"
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
+
+import { UserProvider } from './context/UserContext.jsx';
+import AchievementsPage from "./pages/AchievementsPage";
+import Activate from './pages/Activate';
+import AvatarPage from "./pages/AvatarPage";
+import CategoryPage from "./pages/CategoryPage";
+import FeedbackPage from "./pages/FeedbackPage";
+import HomePage from "./pages/HomePage";
+import LeaderboardPage from "./pages/LeaderboardPage";
+import Login from './pages/Login.jsx';
+import QuizPage from "./pages/QuizPage";
+import Register from './pages/Register.jsx';
+import ResultPage from "./pages/ResultPage";
+import Welcome from "./pages/Welcome.jsx";
 
 function App() {
 
-  const [user, setUser] = useState(null);
+const [user, setUser] = useState(null);
 
   useEffect(() => { 
     fetch("/api", { credentials: "include" })
@@ -27,22 +30,24 @@ function App() {
 
   return (
     <>
+    <UserProvider>
     <Router>
       <Routes>
         <Route path="/" element={<Welcome />} />
-        <Route path="/login" element={<Login setUser={setUser}/>}/>
-        <Route path="/register" element={<Register setUser={setUser} />}/>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/activate/:token" element={<Activate />} />
-        <Route path="/avatar" element={<AvatarPage />} />
-        <Route path="/home" element={<HomePage />} />
-        <Route path="/category/:category" element={<CategoryPage />} />
-        <Route path="/quiz/:category/:difficulty" element={<QuizPage />} />
-        <Route path="/feedback" element={<FeedbackPage />} />
-        <Route path="/result" element={<ResultPage />} />
-        <Route path="/achievements" element={<AchievementsPage />} />
-        <Route path="/leaderboard" element={<LeaderboardPage />} />
+        <Route path="/avatar" element={<ProtectedRoute><AvatarPage /> </ProtectedRoute>} />
+        <Route path="/home" element={<ProtectedRoute><HomePage /> </ProtectedRoute>} />
+        <Route path="/category/:category" element={<ProtectedRoute> <CategoryPage /> </ProtectedRoute>} />
+        <Route path="/quiz/:category/:difficulty" element={<ProtectedRoute> <QuizPage /> </ProtectedRoute>} />
+        <Route path="/feedback" element={ <ProtectedRoute> <FeedbackPage /> </ProtectedRoute>} />
+        <Route path="/result" element={<ProtectedRoute><ResultPage /> </ProtectedRoute>} />
+        <Route path="/achievements" element={<ProtectedRoute><AchievementsPage /> </ProtectedRoute>} />
+        <Route path="/leaderboard" element={<ProtectedRoute><LeaderboardPage /> </ProtectedRoute>} />
       </Routes>
     </Router>
+    </UserProvider>
     </>
   )
 }

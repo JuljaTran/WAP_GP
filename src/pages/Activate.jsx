@@ -1,63 +1,77 @@
-import { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 function Activate() {
-    const { token} = useParams();
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState(null);
-    const [success, setSuccess] = useState(false);
+  const { token } = useParams();
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
+  const [password, setPassword] = useState("");
+  const [tokenValid, setTokenValid] = useState(null);
+  const [error, setError] = useState(null);
 
-    const handleActivate = async (e) => {
-        e.preventDefault();
-        try {
-            //const response = await fetch(`http://localhost:1234/api/register/${token}`, {
-            const response = await fetch(`http://localhost:1234/api/register/${token}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ password })
-            });
-            
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error || 'Activation failed');
-            }
+  //Token validation
+  useEffect(() => {
+    async function checkToken() {
+      try {
+        const res = await fetch(`/api/register/${token}`);
+        setTokenValid(res.ok);
+      } catch {
+        setTokenValid(false);
+      }
+    }
+    checkToken();
+  }, [token]);
 
-            setSuccess(true);
-            alert('Account activated! You can now log in.');
-            navigate('/login');
+  //Set password
+  const handleActivate = async (e) => {
+    e.preventDefault();
 
-        } catch (error) {
-            console.error("Activation error:", error.message);
-            setError(error.message);
-        }
-    };
+    try {
+      const res = await fetch(`/api/register/${token}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password })
+      });
 
-return (
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || "Activation failed");
+      }
+
+      alert("Your account was activated! You can now log in.");
+      navigate("/login");
+
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+
+  if (tokenValid === null) {
+    return <h3>Checking activation link…</h3>;
+  }
+
+  if (tokenValid === false) {
+    return <h3>Invalid or expired activation link.</h3>;
+  }
+
+  return (
     <div className="activation-container">
-      <h2>Activate Account</h2>
-      {error && <div className="error">{error}</div>}
-      {success ? (
-        <div>Account activated! Redirecting to login...</div>
-      ) : (
-        <form onSubmit={handleActivate}>
-          <div>
-            <label htmlFor="password">Set your password:</label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-          <button type="submit">Activate Account</button>
+      <h2>Activate Your Account</h2>
 
-        </form>
-      )}
+      {error && <div className="error">{error}</div>}
+
+      <form onSubmit={handleActivate}>
+        <label>Choose your password:</label>
+        <input
+          type="password"
+          value={password}
+          required
+          onChange={(e) => setPassword(e.target.value)}
+        />
+
+        <button type="submit">Activate Account</button>
+      </form>
     </div>
   );
 }
