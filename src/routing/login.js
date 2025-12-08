@@ -1,6 +1,6 @@
 import express from 'express';
 import bcrypt from 'bcrypt';
-import { ObjectId } from 'mongodb';
+import { ObjectId, TopologyType } from 'mongodb';
 
 const router = express.Router();
 
@@ -35,7 +35,10 @@ router.post('/', async (req, res) => {
                 id: userAuth._id,
                 username: userAuth.username,
                 email: userAuth.email,
-                profileId: profile?._id ?? null
+                profileId: profile?._id ?? null,
+                avatar: profile?.avatar ?? null,
+                totalPoints: profile?.totalPoints ?? 0,
+                unlocked: profile?.unlocked ?? [] 
             }
         });
 
