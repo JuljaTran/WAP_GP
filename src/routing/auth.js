@@ -1,4 +1,4 @@
-import express from 'express';
+/*import express from 'express';
 import users from '../data/users.js';
 
 const router = express.Router();
@@ -119,3 +119,4 @@ router.post("/logout", (req, res) => {
 //export für die middleware
 export { currentUser };
 export default router;
+*/

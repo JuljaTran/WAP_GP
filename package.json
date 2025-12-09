@@ -16,11 +16,15 @@
     "@mui/icons-material": "^7.3.5",
     "@mui/material": "^7.3.5",
     "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
     "express": "^5.1.0",
+    "express-oauth-server": "^2.0.0",
     "express-session": "^1.18.2",
+    "mongodb": "^7.0.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "react-router-dom": "^7.9.5"
+    "react-router-dom": "^7.9.5",
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",

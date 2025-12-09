@@ -13,7 +13,7 @@ function Login() {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        const url = "http://localhost:1234/api/auth/login";
+        const url = "http://localhost:1234/api/login";
 
        try{
             const response = await fetch(url, {
