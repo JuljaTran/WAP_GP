@@ -14,7 +14,7 @@ function Register() {
     
     const handleRegister = async (e) => {
         e.preventDefault();
-        const url = "http://localhost:1234/api/register";
+        const url = "http://localhost:5173/api/register";
 
         try {
             const response = await fetch(url, {

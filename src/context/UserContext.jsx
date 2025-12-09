@@ -4,6 +4,8 @@ const UserContext = createContext();
 
 const DEFAULT = {
   username: null,
+  userId: null,
+  authId: null,
   avatar: null,
   totalPoints: 0,
   unlocked: []
@@ -22,47 +24,70 @@ export function UserProvider({ children }) {
   // Save current user whenever it changes
   useEffect(() => {
     if (!user?.username) return;
-  const current = localStorage.getItem("quiz_user");
-  const parsed = current ? JSON.parse(current) : null;
-
-  if (JSON.stringify(parsed) !== JSON.stringify(user)) {
     localStorage.setItem("quiz_user", JSON.stringify(user));
-  }
   }, [user]);
-
-  // Register a new user (start with 0 points)
-  const register = (username) => {
-    const newUser = { username, avatar: null, totalPoints: 0, unlocked: [] };
-    setUser(newUser);
-  };
 
   // Login an existing user
   const login = (userData) => {
-    if (!userData || !userData.username) {
-    setUser(DEFAULT); // fallback guest
-    return;
-}
+    if (!userData?.profileId) {
+      setUser(DEFAULT); // fallback guest
+      return;
+    }
 
-  setUser(userData);
+  setUser(
+      {
+        username: userData.username,
+        userId: userData.profileId,
+        authId: userData.authId,
+        avatar: userData.avatar,
+        totalPoints: userData.totalPoints || 0,
+        unlocked: userData.unlocked || []
+      }
+  );
 };
 
   // Logout user
   const logout = () => {
-  setUser(DEFAULT);
+    localStorage.removeItem("quiz_user");
   };
 
   
   // Set user's avatar
-  const setAvatar = (avatarKey) => {
-    setUser((u) => ({ ...u, avatar: avatarKey }));
-  };
+  const setAvatar = async (avatarKey) => {
+    if (!user.userId) return;
+
+    try {
+      const response = await fetch(`http://localhost:1234/api/user/${user.userId}/avatar`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ avatar: avatarKey })
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update avatar");
+      }
+
+      setUser(u => ({
+        ...u,
+        avatar: avatarKey
+      }));
+
+    }
+    catch (err) {
+      console.error("Error setting avatar:", err);
+    }
+  }
 
   // Add points to the user and check if any animals are unlocked
   const addPoints = async (pts) => {
-    let unlockedAnimal = null;
+    if (!user || !user.userId) {
+      console.error("No user logged in");
+      return null;
+    }
 
     try {
-    const response = await fetch("http://localhost:1234/api/auth/user/points", {
+    const response = await fetch(`http://localhost:1234/api/user/${user.userId}/points`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -81,17 +106,16 @@ export function UserProvider({ children }) {
       unlocked: data.unlocked
     }));
 
-    const lastUnlock = data.unlocked[data.unlocked.length - 1];
-    unlockedAnimal = lastUnlock || null;
+    return data.unlocked.at (-1) || null; // return the last unlocked animal or null
 
   } catch (err) {
     console.error("Error adding points:", err);
+    return null;
   }
-  return unlockedAnimal;
 };
 
   return (
-    <UserContext.Provider value={{ user, register, login, logout, setAvatar, addPoints, setUserState: setUser }}>
+    <UserContext.Provider value={{ user, login, logout, setAvatar, addPoints }}>
       {children}
     </UserContext.Provider>
   );

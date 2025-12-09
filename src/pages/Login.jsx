@@ -33,7 +33,11 @@ function Login() {
             const result = await response.json();
             console.log("Login successful:", result);
             login(result.user);
-            navigate('/home');
+            if (!result.user.avatar) {
+                navigate("/avatar");
+            } else {
+                navigate("/home");
+}
 
         } catch (error) {
             console.error("Login error:", error.message);

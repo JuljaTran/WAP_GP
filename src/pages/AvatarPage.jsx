@@ -10,16 +10,7 @@ export default function AvatarPage() {
 
   const choose = async (a) => {
     try{
-      const response = await fetch("http://localhost:1234/api/auth/user/avatar", {
-        method: "PATCH",
-        headers: {"Content-Type": "application/json"},
-        credentials: "include",
-        body: JSON.stringify({ avatar: a })
-      });
-      if (!response.ok) {
-        throw new Error("Failed to update avatar");
-      }
-      setAvatar(a);
+      await setAvatar(a);
       navigate("/home");
     } catch (error) {
       console.error("Error updating avatar:", error);
@@ -40,7 +31,7 @@ export default function AvatarPage() {
               <div style={{fontSize:48}}>{avatarEmoji(a)}</div>
               <div style={{marginTop:8}}>{a}</div>
               <div style={{marginTop:8}}>
-                <button onClick={()=>{choose(a); navigate("/home");}}>Select</button>
+                <button onClick={()=>{choose(a)}}>Select</button>
               </div>
             </div>
           ))}
