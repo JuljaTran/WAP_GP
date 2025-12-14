@@ -1,6 +1,14 @@
+import { Box, Button, Typography } from "@mui/material";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
+
+const CATEGORY_IMAGE = {
+  "ancient-history": "/Assets/categories/history.png",
+  "nature": "/Assets/categories/nature.png",
+  "politics": "/Assets/categories/politics.png",
+  "general": "/Assets/categories/general.png",
+};
 
 export default function FeedbackPage() {
   const { state } = useLocation();
@@ -42,31 +50,150 @@ export default function FeedbackPage() {
   };
 
   return (
-    <div className="container">
-      <div className="card center">
-        <h2>{isCorrect ? "✅ Correct!" : "❌ Incorrect"}</h2>
+    <Box
+      sx={{
+        width: "100vw",
+        minHeight: "calc(100vh - 72px)",
+        display: "flex",
+        justifyContent: "center",
+        px: 3,
+        py: 5,
+      }}
+    >
+      <Box sx={{ width: "100%", maxWidth: 900 }}>
+        {/* TOP CARD */}
+        <Box
+          sx={{
+            position: "relative",
+            backgroundColor: "#E8F0FF",
+            borderRadius: 4,
+            px: 5,
+            pt: 4,
+            pb: 0,
+            mb: 5,
+            display: "flex",
+            alignItems: "center",
+            gap: 4,
+            overflow: "hidden",
+          }}
+        >
+          {/* CHARACTER */}
+          <Box
+            component="img"
+            src={CATEGORY_IMAGE[category]}
+            alt="Character"
+            sx={{
+              width: 180,
+              alignSelf: "flex-end",
+              mb: -1,
+            }}
+          />
 
-        {!isCorrect ? (
-          <p>Correct answer: <strong>{correctText}</strong></p>
-        ) : (
-          <p>Good job! +{pointsGained} points</p>
+          {/* TEXT */}
+          <Box>
+            <Typography fontSize={14} color="#4F6EF7" mb={1}>
+              Question {nextIndex} of {totalQuestions}
+            </Typography>
+
+            <Typography
+              variant="h4"
+              fontWeight={700}
+              color={isCorrect ? "#16A34A" : "#DC2626"}
+            >
+              {isCorrect ? "Correct Answer ✅" : "Wrong Answer ❌"}
+            </Typography>
+          </Box>
+        </Box>
+
+        {/* ANSWER INFO */}
+        <Box mb={4}>
+          {!isCorrect && (
+            <>
+              <Typography
+                fontSize={18}
+                fontWeight={600}
+                color="#DC2626"
+                mb={1}
+              >
+                Your answer: {selectedText}
+              </Typography>
+
+              <Typography
+                fontSize={18}
+                fontWeight={700}
+                color="#16A34A"
+                mb={2}
+              >
+                Correct answer: {correctText}
+              </Typography>
+            </>
+          )}
+
+          {info && (
+            <Box
+              sx={{
+                backgroundColor: "#E8F0FF",
+                borderRadius: 3,
+                p: 3,
+                fontSize: 16,
+                lineHeight: 1.6,
+              }}
+            >
+              {info}
+            </Box>
+          )}
+        </Box>
+
+        {/* POINTS / COINS */}
+        {isCorrect && (
+          <Box textAlign="center" mb={5}>
+            <Typography fontSize={18} fontWeight={600} mb={2}>
+              You earn +{pointsGained} points
+            </Typography>
+
+            <Box
+              component="img"
+              src="/Assets/coins.png"
+              alt="Coins"
+              sx={{ width: 120 }}
+            />
+          </Box>
         )}
 
-        {info && (
-          <div style={{ marginTop: 8, padding: 8, background: "#f7f7f7", borderRadius: 6 }}>
-            {info}
-          </div>
-        )}
-
-        <div style={{ marginTop: 16 }}>
-          <button onClick={handleNext}>{nextIndex === totalQuestions ? "End" : "Next"}</button>
-        </div>
-      </div>
-      <div className="container">
-          <button onClick={exitQuiz} style={{ marginBottom: 20, background: "#f44336", color: "white", padding: "8px 12px", border: "none", borderRadius: 4 }}>
-              Exit Quiz
-          </button>
-      </div>
-    </div>
+        {/* NEXT BUTTON */}
+        <Button
+          fullWidth
+          onClick={handleNext}
+          sx={{
+            py: 1.8,
+            borderRadius: 30,
+            fontSize: 18,
+            fontWeight: 600,
+            backgroundColor: "#4F6EF7",
+            color: "#fff",
+            "&:hover": {
+              backgroundColor: "#3B5BDB",
+            },
+          }}
+        >
+          {nextIndex === totalQuestions ? "Finish Quiz" : "Next"}
+        </Button>
+      </Box>
+    </Box>
   );
+}
+
+function categoryImage(category) {
+  switch (category) {
+    case "ancient-history":
+      return "/Assets/categories/history.png";
+    case "nature":
+      return "/Assets/categories/nature.png";
+    case "politics":
+      return "/Assets/categories/politics.png";
+    case "general":
+      return "/Assets/categories/general.png";
+    default:
+      return "/Assets/categories/history.png";
+  }
 }

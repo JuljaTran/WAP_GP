@@ -1,5 +1,9 @@
-import { Link, useNavigate } from "react-router-dom";
+import { AppBar, Box, Button, Tab, Tabs, Toolbar, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext.jsx";
+
+const NAV_HEIGHT = 72;
+const NAV_WIDTH = 1000;
 
 export default function Navbar() {
   const { user, logout } = useUser();
@@ -10,26 +14,105 @@ export default function Navbar() {
     navigate("/");
   };
 
+  const currentTab = location.pathname.startsWith("/leaderboard")
+    ? "/leaderboard"
+    : location.pathname.startsWith("/achievements")
+    ? "/achievements"
+    : "/home";
+
   return (
-    <nav style={{ padding: 12, borderBottom: "1px solid #eee", display: "flex", gap: 12, alignItems: "center" }}>
-      <Link to="/home">Home</Link>
-      <Link to="/leaderboard">Leaderboard</Link>
-      <Link to="/achievements">Achievements</Link>
+    <AppBar
+      position="static"
+      elevation={0}
+      sx={{
+        height: NAV_HEIGHT,
+        width: NAV_WIDTH,
+        mx: "auto",
+        backgroundColor: "#fff",
+        borderBottom: "1px solid #E5E7EB",
+        borderTop: "1px solid #E5E7EB"
+      }}
+    >
+      <Toolbar
+        disableGutters
+        sx={{
+          height: NAV_HEIGHT,
+          px: 4,
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center"
+        }}
+      >
+        {/* LEFT – NAV TABS */}
+        <Tabs
+          value={currentTab}
+          onChange={(_, value) => navigate(value)}
+          textColor="primary"
+          indicatorColor="primary"
+          sx={{
+            minHeight: NAV_HEIGHT,
+            "& .MuiTab-root": {
+              minHeight: NAV_HEIGHT,
+              fontWeight: 600,
+              textTransform: "none",
+              fontSize: "1rem"
+            }
+          }}
+        >
+          <Tab label="Home" value="/home" />
+          <Tab label="Leaderboard" value="/leaderboard" />
+          <Tab label="Achievement" value="/achievements" />
+        </Tabs>
 
-      <div style={{ marginLeft: "auto", display: "flex", gap: 12, alignItems: "center" }}>
-        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+        {/* RIGHT – USER INFO */}
+        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
           {user?.avatar && (
-            <div style={{ width: "36px", height: "36px", fontSize: "20px" }}>
+            <Typography fontSize={22}>
               {avatarEmoji(user.avatar)}
-            </div>
-    )}
-          <span>{user?.username || "Guest"}</span>
-        </div>
+            </Typography>
+          )}
 
-        <div style={{ fontWeight: "bold" }}>Points: {user.totalPoints || 0}</div>
-        <button onClick={handleLogout} style={{ marginLeft: 12 }}>Logout</button>
-      </div>
-    </nav>
+          <Typography fontWeight={600}>
+            {user?.username}
+          </Typography>
+
+          <Box
+            sx={{
+              px: 2,
+              py: 0.7,
+              borderRadius: 20,
+              border: "1.5px solid #669FFD",
+              backgroundColor: "#F5F9FF",
+              color: "#032051",
+              fontWeight: 600,
+              fontSize: "0.95rem"
+            }}
+          >
+            🏆 {user?.totalPoints ?? 0}
+          </Box>
+
+          <Button
+            onClick={handleLogout}
+              sx={{
+              borderRadius: 20,
+              px: 2,
+              py: 0.6,
+              border: "1.5px solid #E53935",
+              color: "#000",
+              fontWeight: 600,
+              backgroundColor: "transparent",
+              textTransform: "none",
+              "&:hover": {
+              backgroundColor: "#E53935",
+              color: "#fff"
+              }
+            }}
+          >
+            Logout
+          </Button>
+        </Box>
+      </Toolbar>
+    </AppBar>
   );
 }
 

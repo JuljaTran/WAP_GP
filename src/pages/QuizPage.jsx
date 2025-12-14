@@ -1,3 +1,4 @@
+import { Box, Button, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { QUESTIONS } from "../data/questions";
@@ -60,29 +61,121 @@ export default function QuizPage(){
   };
 
   return (
-    <div className="container">
-      <h3>{readable(category)} — {capitalize(difficulty)}</h3>
-      <div style={{marginTop:12}}>
-        <div className="small">Question {index+1} / {total}</div>
-        <div className="card" style={{marginTop:8}}>
-          <h4>{q.question}</h4>
-          <div style={{display:"grid",gap:8,marginTop:12}}>
-            {q.options.map((opt, i)=>(
-              <button key={i} onClick={()=>handleAnswer(i)} style={{padding:10,textAlign:"left"}}>{opt}</button>
-            ))}
-          </div>
-        </div>
-      </div>
-      <div className="container">
-          <button onClick={exitQuiz} style={{ marginBottom: 20, background: "#f44336", color: "white", padding: "8px 12px", border: "none", borderRadius: 4 }}>
-              Exit Quiz
-          </button>
-      </div>
-    </div>
+     <Box
+      sx={{
+        width: "100vw",
+        minHeight: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        bgcolor: "#f7faffff",
+        px: 3,
+        py: 4
+      }}
+    >
+      <Box sx={{ width: "100%", maxWidth: 1000 }}>
+        {/* EXIT BUTTON */}
+        <Button
+          onClick={exitQuiz}
+          variant="outlined"
+          color="error"
+          sx={{
+            mb: 3,
+            borderRadius: 30,
+            textTransform: "none",
+            borderColor: "#EF4444",
+            color: "#EF4444",
+            "&:hover": {
+              backgroundColor: "#EF4444",
+              color: "#FFFFFF",
+              borderColor: "#EF4444"
+            }
+          }}
+          >
+          Exit Quiz
+        </Button>
+
+        {/* HEADER CARD */}
+        <Box
+          sx={{
+            backgroundColor: "#e1e8faff",
+            borderRadius: 4,
+            p: 4,
+            mb: 4,
+            display: "grid",
+            gridTemplateColumns: "200px 1fr",
+            gap: 4,
+            alignItems: "center"
+          }}
+        >
+          {/* LEFT */}
+          <Box>
+            <Typography
+              fontSize={14}
+              color="#032051"
+              fontWeight={500}
+              mb={1}
+            >
+              {readable(category)} — {capitalize(difficulty)}
+            </Typography>
+
+            <Box
+              component="img"
+              src="/Assets/LOGO.png"
+              alt="Logo"
+              sx={{ width: 200 }}
+            />
+          </Box>
+
+          {/* RIGHT */}
+          <Typography variant="h3" fontWeight={700}>
+            {q.question}
+          </Typography>
+        </Box>
+
+        {/* QUESTION COUNTER */}
+        <Typography
+          fontSize={14}
+          color="#032051"
+          mb={2}
+        >
+          Question {index + 1} of {total}
+        </Typography>
+
+        {/* ANSWERS */}
+        <Box sx={{ display: "grid", gap: 2 }}>
+          {q.options.map((opt, i) => (
+            <Button
+              key={i}
+              onClick={() => handleAnswer(i)}
+              variant="outlined"
+              sx={{
+                justifyContent: "flex-start",
+                textTransform: "none",
+                fontSize: 16,
+                color: "#000",
+                borderRadius: 3,
+                py: 1.6,
+                borderColor: "#C7D2FE",
+                backgroundColor: "#EEF2FF",
+                "&:hover": {
+                  backgroundColor: "#cee3ffff",
+                  borderColor: "#2A86FF"
+                }
+              }}
+            >
+              {opt}
+            </Button>
+          ))}
+        </Box>
+      </Box>
+    </Box>
   );
 }
 
+
+
 function capitalize(s){ return s[0].toUpperCase()+s.slice(1);}
+
 function readable(key){
   switch(key){
     case "ancient-history": return "Ancient World History";
