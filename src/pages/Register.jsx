@@ -6,7 +6,6 @@ import { useUser } from '../context/UserContext.jsx';
 function Register() {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
 
     const navigate = useNavigate();
@@ -14,7 +13,9 @@ function Register() {
     
     const handleRegister = async (e) => {
         e.preventDefault();
-        const url = "http://localhost:5173/api/register";
+        //const url = "http://localhost:5173/api/register";
+        const url = "/api/register";
+
 
         try {
             const response = await fetch(url, {
@@ -22,7 +23,7 @@ function Register() {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({username, email, password})  
+                body: JSON.stringify({username, email})  
             });
 
             if (!response.ok) {
@@ -113,17 +114,6 @@ function Register() {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="Enter your email"
-        required
-        fullWidth
-        InputLabelProps={{ style: { color: '#032051' } }}
-    />
-
-    <TextField
-        label="Password"
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Enter your password"
         required
         fullWidth
         InputLabelProps={{ style: { color: '#032051' } }}
