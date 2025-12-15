@@ -1,22 +1,45 @@
+import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import { useUser } from "../context/UserContext";
 
-const DUMMY = [
-  { username:"Anna", avatar:"fox", points:3200 },
-  { username:"Lukas", avatar:"dog", points:2800 },
-  { username:"Maya", avatar:"hare", points:1600 }
-];
-
 export default function LeaderboardPage(){
   const { user } = useUser();
+  const [rows, setRows] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const rows = [...DUMMY];
-  if(user.username){
-    const exists = rows.find(r => r.username === user.username);
-    if(!exists) rows.push({ username: user.username, avatar:user.avatar, points: user.totalPoints || 0});
+  useEffect(() => {
+    async function loadLeaderboard() {
+      try {
+        const res = await fetch("/api/leaderboard", {
+          credentials: "include"
+        });
+
+        if (!res.ok) {
+          throw new Error("Failed to load leaderboard");
+        }
+
+        const data = await res.json();
+        setRows(data);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadLeaderboard();
+  }, []);
+
+  if (loading) {
+    return (
+      <>
+        <Navbar />
+        <div className="container">
+          <p>Loading leaderboard...</p>
+        </div>
+      </>
+    );
   }
-
-  rows.sort((a,b)=>b.points - a.points);
 
   return (
     <>
@@ -25,17 +48,17 @@ export default function LeaderboardPage(){
         <h2>Leaderboard</h2>
         <ol>
           {rows.map((r,i)=>(
-            <li key={i} 
+            <li key={r._id} 
                 style={{
                   marginBottom:8, 
                   padding:8, 
-                  background: r.username===user.username ? "#fff9c4" : "#fff", 
+                  background: r.username===user?.username ? "#fff9c4" : "#fff", 
                   borderRadius:6,
                   display:"flex",
                   justifyContent:"space-between",
                   alignItems:"center"
                 }}>
-              <span><strong>{r.username}</strong> — {r.points} pts</span>
+              <span><strong>{r.username}</strong> — {r.totalPoints} pts</span>
               <span style={{marginLeft:8, fontSize:24}}>{avatarEmoji(r.avatar)}</span>
             </li>
           ))}

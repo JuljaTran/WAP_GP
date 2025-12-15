@@ -1,16 +1,17 @@
 
 import cors from "cors";
+import 'dotenv/config';
 import express from 'express';
+import ExpressOAuthServer from "express-oauth-server";
+import { MongoClient } from 'mongodb';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import api from "./src/routing/api.js";
-import { MongoClient, ServerApiVersion } from 'mongodb';
-import 'dotenv/config';
 import oAuthModel from "./src/models/oAuthModel.js";
-import ExpressOAuthServer from "express-oauth-server";
+import api from "./src/routing/api.js";
 
-import register from './src/routing/register.js';
+import leaderboard from './src/routing/leaderboard.js';
 import login from './src/routing/login.js';
+import register from './src/routing/register.js';
 import user from './src/routing/user.js';
 
 const connectionString = process.env.MONGODB_CONNECTION_STRING;
@@ -44,7 +45,9 @@ try {
 
   //protected api route 
   app.use('/api/protected', oauth.authenticate()); 
- 
+
+  app.use('/api/leaderboard', leaderboard); 
+  
   //user 
   app.use('/api/user', user);
   
