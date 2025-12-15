@@ -1,5 +1,6 @@
+import { Alert, Box, Button, Container, TextField, Typography } from "@mui/material";
 import { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 function Activate() {
     const { token} = useParams();
@@ -37,28 +38,96 @@ function Activate() {
     };
 
 return (
-    <div className="activation-container">
-      <h2>Activate Account</h2>
-      {error && <div className="error">{error}</div>}
-      {success ? (
-        <div>Account activated! Redirecting to login...</div>
-      ) : (
-        <form onSubmit={handleActivate}>
-          <div>
-            <label htmlFor="password">Set your password:</label>
-            <input
+    <Box
+      sx={{
+        width: "100vw",
+        minHeight: "100vh",
+        bgcolor: "#FFFFFF",
+        position: "relative",
+        overflow: "hidden",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        p: 4
+      }}
+    >
+      {/* Background elements */}
+      <Box
+        component="img"
+        src="/Assets/top_left_element.png"
+        alt="Top left spheres"
+        sx={{ position: "absolute", top: 0, left: 0, width: 200, zIndex: 0 }}
+      />
+      <Box
+        component="img"
+        src="/Assets/bottom_right_element.png"
+        alt="Bottom right spheres"
+        sx={{ position: "absolute", bottom: 0, right: 0, width: 150, zIndex: 0 }}
+      />
+      <Box
+        component="img"
+        src="/Assets/panda_bottom.png"
+        alt="Panda"
+        sx={{ position: "absolute", width: 200, bottom: 0, zIndex: 1 }}
+      />
+
+      <Container maxWidth="sm" sx={{ zIndex: 2 }}>
+        <Typography variant="h3" sx={{ fontWeight: 400, mb: 5 }}>
+          Almost there,{" "}
+          <Box component="span" sx={{ fontWeight: 700 }}>
+            activate your account!
+          </Box>
+        </Typography>
+
+        {error && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {error}
+          </Alert>
+        )}
+
+        {success ? (
+          <Alert severity="success">
+            Account activated! Redirecting to login…
+          </Alert>
+        ) : (
+          <Box
+            component="form"
+            onSubmit={handleActivate}
+            sx={{ display: "flex", flexDirection: "column", gap: 3 }}
+          >
+            <TextField
+              label="Set your password"
               type="password"
-              id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              fullWidth
+              InputLabelProps={{ style: { color: "#032051" } }}
             />
-          </div>
-          <button type="submit">Activate Account</button>
 
-        </form>
-      )}
-    </div>
+            <Button
+              type="submit"
+              variant="contained"
+              sx={{
+                width: "100%",
+                borderRadius: 30,
+                py: 1.5,
+                fontSize: "1.2rem",
+                fontWeight: 600,
+                backgroundColor: "#669FFD",
+                color: "#FFFFFF",
+                "&:hover": {
+                  backgroundColor: "#557EDC",
+                  color: "#FFFFFF"
+                }
+              }}
+            >
+              Activate account
+            </Button>
+          </Box>
+        )}
+      </Container>
+    </Box>
   );
 }
 
