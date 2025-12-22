@@ -17,6 +17,7 @@ import QuizPage from "./pages/QuizPage"
 import Register from './pages/Register.jsx'
 import ResultPage from "./pages/ResultPage"
 import Welcome from "./pages/Welcome.jsx"
+import NotFound from "./pages/NotFound.jsx"
 
 function App() {
 
@@ -47,6 +48,7 @@ function App() {
         <Route path="/result" element={<ProtectedRoute><ResultPage /> </ProtectedRoute>} />
         <Route path="/achievements" element={<ProtectedRoute><AchievementsPage /> </ProtectedRoute>} />
         <Route path="/leaderboard" element={<ProtectedRoute><LeaderboardPage /> </ProtectedRoute>} />
+        <Route path="*" element={<NotFound />}></Route>
       </Routes>
     </Router>
     </UserProvider>
