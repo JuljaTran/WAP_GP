@@ -46,9 +46,12 @@ router.patch('/:userId/points', async(req, res) => {
         const newPoints = (user.totalPoints || 0) + points;
 
         const thresholds = [
+            { key: "mouse", pts: 50 },
             { key: "rabbit", pts: 100 },
             { key: "dog", pts: 500 },
-            { key: "lion", pts: 1000 }
+            { key: "owl", pts: 800 },
+            { key: "lion", pts: 1000 },
+            { key: "dolphin", pts: 1500 },
         ];
 
         //Unlock animals

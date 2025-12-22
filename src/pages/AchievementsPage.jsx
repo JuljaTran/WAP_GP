@@ -2,9 +2,9 @@ import Navbar from "../components/Navbar";
 import { useUser } from "../context/UserContext";
 import { Box, Typography } from "@mui/material";
 
-const ACHIEVEMENTS = [
+const ANIMALS = [
   { key: "mouse", name: "Mouse", pts: 50, emoji: "🐭", desc: "You started your journey of knowledge" },
-  { key: "rabbit", name: "Rabbit", pts: 100, emoji: "🐇", desc: "Quick learner!" },
+  { key: "rabbit", name: "Rabbit", pts: 100, emoji: "🐰", desc: "Quick learner!" },
   { key: "dog", name: "Dog", pts: 500, emoji: "🐶", desc: "Loyal and smart" },
   { key: "owl", name: "Owl", pts: 800, emoji: "🦉", desc: "Wise observer" },
   { key: "lion", name: "Lion", pts: 1000, emoji: "🦁", desc: "King of knowledge" },
@@ -41,7 +41,7 @@ export default function AchievementsPage() {
               gap: 4,
             }}
           >
-            {ACHIEVEMENTS.map((a) => {
+            {ANIMALS.map((a) => {
               const unlocked = user.unlocked?.includes(a.key);
               return (
                 <Box
