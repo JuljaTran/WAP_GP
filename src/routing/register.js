@@ -26,7 +26,7 @@ Collection user - daten für das frontend
 }
 */
 //Registrierung
-router.post('/', async(req, res) => {
+export const registerPostHandler = async(req, res) => {
     try {
         const db = req.app.get('db');
 
@@ -71,9 +71,9 @@ router.post('/', async(req, res) => {
         console.error(err);
         res.status(500).json({ message: "Internal server error" });
     }
-});
+};
 
-router.get('/:token', async (req, res) => {
+export const validateTokenHandler =  async (req, res) => {
     const db = req.app.get('db');
     const token = await db.collection('token').findOne({ emailToken: req.params.token });
 
@@ -82,10 +82,10 @@ router.get('/:token', async (req, res) => {
     }
 
     return res.status(200).json({ message: "Token valid" });
-})
+}
 
 //Aktivierung
-router.put('/:token', async (req, res) => {
+export const activateAccountHandler =  async (req, res) => {
     try {
         const db = req.app.get('db');
         const password = req.body.password;
@@ -146,6 +146,10 @@ router.put('/:token', async (req, res) => {
             console.error(err);
             res.status(500).send();
     }
-});
+};
 
-export default router
+router.post('/', registerPostHandler);
+router.get('/:token', validateTokenHandler);
+router.put('/:token', activateAccountHandler);
+
+export default router;
