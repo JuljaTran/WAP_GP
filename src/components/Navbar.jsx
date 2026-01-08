@@ -119,10 +119,11 @@ export default function Navbar() {
 function avatarEmoji(key) {
    switch (key) { 
     case "fox": return "🦊"; 
-    case "rabbit": return "🐇"; 
+    case "rabbit": return "🐰"; 
     case "dog": return "🐶"; 
     case "lion": return "🦁"; 
-    case "eagle": return "🦅"; 
+    case "owl": return "🦉"; 
+    case "cat": return "🐱"; 
     default: return "🙂"; 
   } 
 }

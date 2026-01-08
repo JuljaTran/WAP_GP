@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import { useUser } from "../context/UserContext";
+import { Box, Typography } from "@mui/material";
 
 export default function LeaderboardPage(){
   const { user } = useUser();
@@ -44,37 +45,67 @@ export default function LeaderboardPage(){
   return (
     <>
       <Navbar />
-      <div className="container" style={{marginTop: 20}}>
-        <h2>Leaderboard</h2>
-        <ol>
-          {rows.map((r,i)=>(
-            <li key={r._id} 
-                style={{
-                  marginBottom:8, 
-                  padding:8, 
-                  background: r.username===user?.username ? "#fff9c4" : "#fff", 
-                  borderRadius:6,
-                  display:"flex",
-                  justifyContent:"space-between",
-                  alignItems:"center"
-                }}>
-              <span><strong>{r.username}</strong> — {r.totalPoints} pts</span>
-              <span style={{marginLeft:8, fontSize:24}}>{avatarEmoji(r.avatar)}</span>
-            </li>
-          ))}
-        </ol>
-      </div>
+      <Box
+        sx={{
+          width: "100vw",
+          minHeight: "calc(100vh - 72px)",
+          display: "flex",
+          justifyContent: "center",
+          bgcolor: "#F7FAFF",
+          px: 3,
+          py: 6,
+        }}
+      >
+        <Box sx={{ width: "100%", maxWidth: 800 }}>
+          <Typography variant="h4" sx={{ fontWeight: 700, mb: 4, textAlign: "center" }}>
+            Leaderboard
+          </Typography>
+
+          {loading ? (
+            <Typography textAlign="center">Loading leaderboard...</Typography>
+          ) : (
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+              {rows.map((r, i) => (
+                <Box
+                  key={r._id}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    px: 3,
+                    py: 2,
+                    borderRadius: 3,
+                    backgroundColor: r.username === user?.username ? "#fff9c4" : "#fff",
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+                    transition: "all 0.25s ease",
+                    "&:hover": {
+                      transform: "translateY(-2px)",
+                      boxShadow: "0 6px 18px rgba(0,0,0,0.12)",
+                    },
+                  }}
+                >
+                  <Typography sx={{ fontWeight: 600 }}>
+                    {i + 1}. {r.username} — {r.totalPoints} pts
+                  </Typography>
+                  <Typography sx={{ fontSize: 28 }}>{avatarEmoji(r.avatar)}</Typography>
+                </Box>
+              ))}
+            </Box>
+          )}
+        </Box>
+      </Box>
     </>
   );
 }
 
 function avatarEmoji(k){
   switch(k){
-    case "fox": return "🦊";
-    case "rabbit": return "🐇";
-    case "dog": return "🐶";
-    case "lion": return "🦁";
-    case "eagle": return "🦅";
-    default: return "🙂";
+    case "fox": return "🦊"; 
+    case "rabbit": return "🐰"; 
+    case "dog": return "🐶"; 
+    case "lion": return "🦁"; 
+    case "owl": return "🦉"; 
+    case "cat": return "🐱"; 
+    default: return "🙂"; 
   }
 }
