@@ -1,11 +1,16 @@
-import { AppBar, Box, Button, Tab, Tabs, Toolbar, Typography } from "@mui/material";
+import { AppBar, Toolbar, Tabs, Tab, Box, Typography, Button, IconButton, Menu, MenuItem } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext.jsx";
+import { useState } from "react";
 
 const NAV_HEIGHT = 72;
-const NAV_WIDTH = 1000;
 
 export default function Navbar() {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const handleMenuOpen = (event) => setAnchorEl(event.currentTarget);
+  const handleMenuClose = () => setAnchorEl(null);
+
   const { user, logout } = useUser();
   const navigate = useNavigate();
 
@@ -26,10 +31,9 @@ export default function Navbar() {
       elevation={0}
       sx={{
         height: NAV_HEIGHT,
-        width: NAV_WIDTH,
-        mx: "auto",
+        width: "100%",
         backgroundColor: "#fff",
-        borderBottom: "1px solid #E5E7EB",
+        borderBottom: "1px solid #98a4bc",
         borderTop: "1px solid #E5E7EB"
       }}
     >
@@ -37,32 +41,61 @@ export default function Navbar() {
         disableGutters
         sx={{
           height: NAV_HEIGHT,
-          px: 4,
+          px: 3,
+          maxWidth: 1100,
+          mx: "auto",
+          width: "100%",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center"
         }}
       >
-        {/* LEFT – NAV TABS */}
-        <Tabs
-          value={currentTab}
-          onChange={(_, value) => navigate(value)}
-          textColor="primary"
-          indicatorColor="primary"
-          sx={{
+      {/* DESKTOP TABS */}
+      <Tabs
+        value={currentTab}
+        onChange={(_, value) => navigate(value)}
+        textColor="primary"
+        indicatorColor="primary"
+        sx={{
+          minHeight: NAV_HEIGHT,
+          overflowX: "auto",
+          display: { xs: "none", sm: "flex" }, // Nur auf sm+ anzeigen
+          "& .MuiTab-root": {
             minHeight: NAV_HEIGHT,
-            "& .MuiTab-root": {
-              minHeight: NAV_HEIGHT,
-              fontWeight: 600,
-              textTransform: "none",
-              fontSize: "1rem"
-            }
-          }}
-        >
-          <Tab label="Home" value="/home" />
-          <Tab label="Leaderboard" value="/leaderboard" />
-          <Tab label="Achievement" value="/achievements" />
-        </Tabs>
+            fontWeight: 600,
+            textTransform: "none",
+            fontSize: "1rem"
+          }
+        }}
+      >
+        <Tab label="Home" value="/home" />
+        <Tab label="Leaderboard" value="/leaderboard" />
+        <Tab label="Achievements" value="/achievements" />
+      </Tabs>
+
+      {/* MOBILE BURGER MENU */}
+      <IconButton
+        edge="start"
+        color="inherit"
+        aria-label="menu"
+        onClick={handleMenuOpen}
+        sx={{ display: { xs: "flex", sm: "none" } }} // Nur auf xs anzeigen
+      >
+        <MenuIcon />
+      </IconButton>
+
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleMenuClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+        transformOrigin={{ vertical: "top", horizontal: "left" }}
+      >
+        <MenuItem onClick={() => { navigate("/home"); handleMenuClose(); }}>Home</MenuItem>
+        <MenuItem onClick={() => { navigate("/leaderboard"); handleMenuClose(); }}>Leaderboard</MenuItem>
+        <MenuItem onClick={() => { navigate("/achievements"); handleMenuClose(); }}>Achievements</MenuItem>
+      </Menu>
+
 
         {/* RIGHT – USER INFO */}
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
@@ -90,26 +123,24 @@ export default function Navbar() {
           >
             🏆 {user?.totalPoints ?? 0}
           </Box>
-
           <Button
-            onClick={handleLogout}
-              sx={{
-              borderRadius: 20,
-              px: 2,
-              py: 0.6,
-              border: "1.5px solid #E53935",
-              color: "#000",
-              fontWeight: 600,
-              backgroundColor: "transparent",
-              textTransform: "none",
-              "&:hover": {
-              backgroundColor: "#E53935",
-              color: "#fff"
-              }
-            }}
-          >
-            Logout
-          </Button>
+          onClick={handleLogout}
+          variant="outlined"
+          color="error"
+          sx={{
+            borderRadius: 20,
+            px: 2,
+            py: 0.6,
+            fontWeight: 600,
+            textTransform: "none",
+            "&:hover": {
+              backgroundColor: (theme) => theme.palette.error.main,
+              color: "#fff",
+            },
+          }}
+        >
+          Logout
+        </Button>
         </Box>
       </Toolbar>
     </AppBar>
