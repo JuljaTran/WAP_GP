@@ -1,6 +1,7 @@
 import { AppBar, Box, Button, Tab, Tabs, Toolbar, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useUser } from "../context/UserContext.jsx";
+//import { useUser } from "../context/UserContext.jsx";
+import { useUser } from "../context/useUser.js";
 
 const NAV_HEIGHT = 72;
 const NAV_WIDTH = 1000;
@@ -117,15 +118,15 @@ export default function Navbar() {
 }
 
 function avatarEmoji(key) {
-   switch (key) { 
-    case "fox": return "🦊"; 
-    case "rabbit": return "🐰"; 
-    case "dog": return "🐶"; 
-    case "lion": return "🦁"; 
-    case "owl": return "🦉"; 
-    case "cat": return "🐱"; 
-    default: return "🙂"; 
-  } 
+   switch (key) {
+    case "fox": return "🦊";
+    case "rabbit": return "🐰";
+    case "dog": return "🐶";
+    case "lion": return "🦁";
+    case "owl": return "🦉";
+    case "cat": return "🐱";
+    default: return "🙂";
+  }
 }
 
 

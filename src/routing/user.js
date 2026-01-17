@@ -1,5 +1,4 @@
-//Alle User daten geupdated - Punkte, avatar 
-import { avatarClasses } from '@mui/material';
+//Alle User daten geupdated - Punkte, avatar
 import express from 'express';
 import { ObjectId } from 'mongodb';
 
@@ -40,9 +39,9 @@ router.patch('/:userId/points', async(req, res) => {
         const { userId } = req.params;
 
         const user= await db.collection('user').findOne({ _id: new ObjectId(userId) });
-        
+
         if (!user) return res.status(404).json({ error: "User not found" });
-        
+
         const newPoints = (user.totalPoints || 0) + points;
 
         const thresholds = [
@@ -87,7 +86,7 @@ router.patch('/:userId/avatar', async (req, res) => {
         const { userId } = req.params;
 
         const user = await db.collection("user").findOne({ _id: new ObjectId(userId) });
-        
+
         if (!user) return res.status(404).json({ error: "User not found" });
 
         await db.collection("user").updateOne(

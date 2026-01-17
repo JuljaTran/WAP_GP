@@ -1,7 +1,7 @@
 import { Alert, Box, Button, Container, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useUser } from '../context/UserContext';
+import { useUser } from "../context/useUser.js";
 
 
 function Login() {
@@ -22,7 +22,7 @@ function Login() {
                     'Content-Type': 'application/json'
                 },
                 credentials: 'include',
-                body: JSON.stringify({email, password})  
+                body: JSON.stringify({email, password})
             });
 
             if (!response.ok) {

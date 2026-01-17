@@ -1,5 +1,5 @@
 import { CssBaseline, ThemeProvider } from "@mui/material"
-import { useEffect, useState } from 'react'
+//import { useEffect, useState } from 'react'
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom"
 import ProtectedRoute from "./components/ProtectedRoute.jsx"
 import { UserProvider } from "./context/UserContext.jsx"
@@ -13,22 +13,22 @@ import FeedbackPage from "./pages/FeedbackPage"
 import HomePage from "./pages/HomePage"
 import LeaderboardPage from "./pages/LeaderboardPage"
 import Login from './pages/Login.jsx'
+import NotFound from "./pages/NotFound.jsx"
 import QuizPage from "./pages/QuizPage"
 import Register from './pages/Register.jsx'
 import ResultPage from "./pages/ResultPage"
 import Welcome from "./pages/Welcome.jsx"
-import NotFound from "./pages/NotFound.jsx"
 
 function App() {
 
-  const [user, setUser] = useState(null);
+  /*const [user, setUser] = useState(null);
 
-  useEffect(() => { 
+  useEffect(() => {
     fetch("/api", { credentials: "include" })
     .then(res => res.json())
     .then(data => setUser(data))
     .catch(() => setUser(null));
-  }, []);
+  }, []);*/
 
   return (
     <ThemeProvider theme={theme}>

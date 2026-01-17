@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import { useUser } from "../context/UserContext";
+import { useUser } from "../context/useUser.js";
 
 const ANIMALS = [
   { key: "mouse", name: "Mouse", pts: 50, emoji: "🐭", desc: "You started your journey of knowledge" },
@@ -23,7 +23,7 @@ export default function ResultPage() {
 
 const totalPointsAfterQuiz = (user.totalPoints || 0);
 const unlockedKeys = user.unlocked || [];
-const newlyUnlocked = ANIMALS.find(a => 
+const newlyUnlocked = ANIMALS.find(a =>
   !unlockedKeys.includes(a.key) && totalPointsAfterQuiz >= a.pts
 );
 
@@ -55,7 +55,7 @@ const nextAnimal = ANIMALS.find(a => !unlockedKeys.includes(a.key));
         </div>
       )}
 
-      
+
       <button onClick={() => nav("/leaderboard")}>Go to Leaderboard</button>
     </div>
   );
