@@ -1,5 +1,5 @@
 import Navbar from "../components/Navbar";
-import { useUser } from "../context/UserContext";
+import { useUser } from "../context/useUser.js";
 import { Box, Typography } from "@mui/material";
 import { Container } from "@mui/material";
 

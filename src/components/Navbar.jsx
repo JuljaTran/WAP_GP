@@ -1,7 +1,7 @@
 import { AppBar, Toolbar, Tabs, Tab, Box, Typography, Button, IconButton, Menu, MenuItem } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useNavigate } from "react-router-dom";
-import { useUser } from "../context/UserContext.jsx";
+import { useUser } from "../context/useUser.js";
 import { useState } from "react";
 
 const NAV_HEIGHT = 72;
