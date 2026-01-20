@@ -1,7 +1,7 @@
 import { Box, Button, Typography } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import { useUser } from "../context/UserContext";
+import { useUser } from "../context/useUser.js";
 
 const ANIMALS = [
   { key: "mouse", name: "Mouse", pts: 50, emoji: "🐭", desc: "You started your journey of knowledge" },
