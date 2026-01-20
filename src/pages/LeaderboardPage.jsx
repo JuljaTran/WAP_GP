@@ -1,7 +1,7 @@
+import { Box, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
-import { useUser } from "../context/UserContext";
-import { Box, Typography } from "@mui/material";
+import { useUser } from "../context/useUser.js";
 
 export default function LeaderboardPage(){
   const { user } = useUser();
@@ -100,12 +100,12 @@ export default function LeaderboardPage(){
 
 function avatarEmoji(k){
   switch(k){
-    case "fox": return "🦊"; 
-    case "rabbit": return "🐰"; 
-    case "dog": return "🐶"; 
-    case "lion": return "🦁"; 
-    case "owl": return "🦉"; 
-    case "cat": return "🐱"; 
-    default: return "🙂"; 
+    case "fox": return "🦊";
+    case "rabbit": return "🐰";
+    case "dog": return "🐶";
+    case "lion": return "🦁";
+    case "owl": return "🦉";
+    case "cat": return "🐱";
+    default: return "🙂";
   }
 }

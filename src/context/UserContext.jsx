@@ -1,6 +1,6 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { UserContext } from "./UserContext.js";
 
-const UserContext = createContext();
 
 const DEFAULT = {
   username: null,
@@ -51,7 +51,7 @@ export function UserProvider({ children }) {
     localStorage.removeItem("quiz_user");
   };
 
-  
+
   // Set user's avatar
   const setAvatar = async (avatarKey) => {
     if (!user.userId) return;
@@ -119,8 +119,4 @@ export function UserProvider({ children }) {
       {children}
     </UserContext.Provider>
   );
-}
-
-export function useUser() { 
-  return useContext(UserContext); 
 }

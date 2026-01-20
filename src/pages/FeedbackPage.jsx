@@ -1,7 +1,7 @@
 import { Box, Button, Typography } from "@mui/material";
-import { useState } from "react";
+//import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useUser } from "../context/UserContext";
+import { useUser } from "../context/useUser.js";
 
 const CATEGORY_IMAGE = {
   "ancient-history": "/Assets/categories/history.png",
@@ -13,35 +13,32 @@ const CATEGORY_IMAGE = {
 export default function FeedbackPage() {
   const { state } = useLocation();
   const navigate = useNavigate();
-  const { user, addPoints } = useUser();
-  const [unlockedThisQuiz, setUnlockedThisQuiz] = useState(null);
-
-  const exitQuiz = () => {
-  navigate("/home");
-};
+  //const { user, addPoints } = useUser();
+  const { addPoints } = useUser();
+  //const [unlockedThisQuiz, setUnlockedThisQuiz] = useState(null);
 
   if (!state) return <div className="container card">No feedback data.</div>;
 
-  const { 
-    isCorrect, 
-    info, 
-    selectedText, 
-    correctText, 
-    nextIndex, 
-    score, 
+  const {
+    isCorrect,
+    info,
+    selectedText,
+    correctText,
+    nextIndex,
+    score,
     pointsGained,
-    category, 
+    category,
     difficulty,
     totalQuestions
   } = state;
 
-   
+
 
   const handleNext = () => {
     if (isCorrect && pointsGained > 0) {
       addPoints(pointsGained);
     }
-    
+
     if (nextIndex < totalQuestions) {
       navigate(`/quiz/${category}/${difficulty}`, { state: { currentIndex: nextIndex, score } });
     } else {
@@ -183,17 +180,3 @@ export default function FeedbackPage() {
   );
 }
 
-function categoryImage(category) {
-  switch (category) {
-    case "ancient-history":
-      return "/Assets/categories/history.png";
-    case "nature":
-      return "/Assets/categories/nature.png";
-    case "politics":
-      return "/Assets/categories/politics.png";
-    case "general":
-      return "/Assets/categories/general.png";
-    default:
-      return "/Assets/categories/history.png";
-  }
-}

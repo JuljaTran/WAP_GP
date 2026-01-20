@@ -2,7 +2,7 @@ import { Box, Button, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import { useUser } from "../context/UserContext";
+import { useUser } from "../context/useUser.js";
 
 const CATEGORIES = [
   {
@@ -33,7 +33,6 @@ const CATEGORIES = [
 
 export default function HomePage() {
   const nav = useNavigate();
-  const categories = ["ancient-history", "nature", "politics", "general"];
   const { user } = useUser();
 
   useEffect(() => {
