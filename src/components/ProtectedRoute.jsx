@@ -1,11 +1,12 @@
 import { Navigate, useLocation } from "react-router-dom";
-import { useUser } from "../context/UserContext";
+//import { useUser } from "../context/UserContext";
+import { useUser } from "../context/useUser.js";
 
 export default function ProtectedRoute({ children }) {
   const { user } = useUser();
   const location = useLocation();
 
-  //Not Logged in
+  //Not Logged ins
   if (!user?.username) {
     return <Navigate to="/login" />;
   }
