@@ -1,13 +1,13 @@
+import { Box, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import { useUser } from "../context/UserContext";
-import { Box, Typography } from "@mui/material";
+import { useUser } from "../context/useUser.js";
 
 const AVATARS = ["fox","rabbit","dog","lion","owl", "cat"];
 
 export default function AvatarPage() {
   const navigate = useNavigate();
-  const { setAvatar, user } = useUser();
+  const { setAvatar} = useUser();
 
   const choose = async (a) => {
     try{
@@ -35,7 +35,7 @@ export default function AvatarPage() {
         }}
       >
         <Box sx={{ width: "100%", maxWidth: 1000, textAlign: "center" }}>
-          
+
           {/* HEADER HERO */}
           <Box
             sx={{
@@ -101,13 +101,13 @@ export default function AvatarPage() {
 }
 
 function avatarEmoji(key) {
-   switch (key) { 
-    case "fox": return "🦊"; 
-    case "rabbit": return "🐰"; 
-    case "dog": return "🐶"; 
-    case "lion": return "🦁"; 
-    case "owl": return "🦉"; 
-    case "cat": return "🐱"; 
-    default: return "🙂"; 
-  } 
+   switch (key) {
+    case "fox": return "🦊";
+    case "rabbit": return "🐰";
+    case "dog": return "🐶";
+    case "lion": return "🦁";
+    case "owl": return "🦉";
+    case "cat": return "🐱";
+    default: return "🙂";
+  }
 }

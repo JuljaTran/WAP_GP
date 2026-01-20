@@ -1,7 +1,6 @@
-import Navbar from "../components/Navbar";
-import { useUser } from "../context/UserContext";
 import { Box, Typography } from "@mui/material";
-import { Container } from "@mui/material";
+import Navbar from "../components/Navbar";
+import { useUser } from "../context/useUser.js";
 
 const ANIMALS = [
   { key: "mouse", name: "Mouse", pts: 50, emoji: "🐭", desc: "You started your journey of knowledge" },

@@ -1,8 +1,8 @@
 import { AppBar, Toolbar, Tabs, Tab, Box, Typography, Button, IconButton, Menu, MenuItem } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useNavigate } from "react-router-dom";
-import { useUser } from "../context/UserContext.jsx";
-import { useState } from "react";
+//import { useUser } from "../context/UserContext.jsx";
+import { useUser } from "../context/useUser.js";
 
 const NAV_HEIGHT = 72;
 
@@ -148,15 +148,15 @@ export default function Navbar() {
 }
 
 function avatarEmoji(key) {
-   switch (key) { 
-    case "fox": return "🦊"; 
-    case "rabbit": return "🐰"; 
-    case "dog": return "🐶"; 
-    case "lion": return "🦁"; 
-    case "owl": return "🦉"; 
-    case "cat": return "🐱"; 
-    default: return "🙂"; 
-  } 
+   switch (key) {
+    case "fox": return "🦊";
+    case "rabbit": return "🐰";
+    case "dog": return "🐶";
+    case "lion": return "🦁";
+    case "owl": return "🦉";
+    case "cat": return "🐱";
+    default: return "🙂";
+  }
 }
 
 

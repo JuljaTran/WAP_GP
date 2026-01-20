@@ -1,16 +1,13 @@
 import { Alert, Box, Button, Container, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
-import { Link, useNavigate } from "react-router-dom";
-import { useUser } from '../context/UserContext.jsx';
+import { Link } from "react-router-dom";
 
 function Register() {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [error, setError] = useState(null);
 
-    const navigate = useNavigate();
-    const { register, login } = useUser();
-    
+
     const handleRegister = async (e) => {
         e.preventDefault();
         //const url = "http://localhost:5173/api/register";
@@ -23,7 +20,7 @@ function Register() {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({username, email})  
+                body: JSON.stringify({username, email})
             });
 
             if (!response.ok) {
@@ -33,7 +30,7 @@ function Register() {
 
             const result = await response.json();
             console.log("Register successful:", result);
-            alert("Registration successful! Check your email (console) for the activation link.");          
+            alert("Registration successful! Check your email (console) for the activation link.");
         } catch (error) {
             console.error("Register/Login error:", error.message);
             setError(error.message);
@@ -132,7 +129,7 @@ function Register() {
             color: '#FFFFFF',
             '&:hover': { backgroundColor: '#557EDC', color: '#FFFFFF' },
         }}
-    >   
+    >
         Register
     </Button>
 
