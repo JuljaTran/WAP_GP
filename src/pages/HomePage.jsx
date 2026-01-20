@@ -2,7 +2,7 @@ import { Box, Button, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import { useUser } from "../context/useUser.js";
+import { useUser } from "../context/UserContext";
 
 const CATEGORIES = [
   {
@@ -141,16 +141,14 @@ export default function HomePage() {
                   <Button
                     onClick={() => nav(`/category/${cat.key}`)}
                     sx={{
-                      minWidth: 44,
-                      minHeight: 44,
-                      borderRadius: "50%",
+                      width: { xs: 50, sm: 60 },
+                      height: { xs: 50, sm: 60 },
+                      borderRadius: '50%',
                       backgroundColor: "#fff",
                       color: "#032051",
-                      fontSize: 20,
+                      fontSize: { xs: 16, sm: 20 },
                       boxShadow: "0 4px 10px rgba(0,0,0,0.15)",
-                      "&:hover": {
-                        backgroundColor: "#f1f1f1",
-                      },
+                      "&:hover": { backgroundColor: "#f1f1f1" },
                     }}
                   >
                     →
