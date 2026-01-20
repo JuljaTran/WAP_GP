@@ -76,18 +76,12 @@ function Welcome() {
           to="/login"
           variant="contained"
           sx={{
-            width: 400,
-            borderRadius: 30,
-            py: 1.5,
-            fontSize: '1.2rem',
-            fontWeight: 600,
-            backgroundColor: '#669FFD', 
-            color: '#FFFFFF',
-            '&:hover': { 
-                backgroundColor: '#578be0ff' ,
-                color:  '#FFFFFF',
-            },
-          }}
+  width: { xs: '80%', sm: 300, md: 400 }, // XS: 80% des Containers, SM: 300px, MD+: 400px
+  borderRadius: 30,
+  py: 1.5,
+  fontSize: '1.2rem',
+  fontWeight: 600,
+}}
         >
           Log in
         </Button>

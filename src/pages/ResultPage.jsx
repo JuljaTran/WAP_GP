@@ -1,10 +1,11 @@
+import { Box, Button, Typography } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import { useUser } from "../context/useUser.js";
+import { useUser } from "../context/UserContext";
 
 const ANIMALS = [
   { key: "mouse", name: "Mouse", pts: 50, emoji: "🐭", desc: "You started your journey of knowledge" },
-  { key: "rabbit", name: "Rabbit", pts: 100, emoji: "🐇", desc: "Quick learner!" },
+  { key: "rabbit", name: "Rabbit", pts: 100, emoji: "🐰", desc: "Quick learner!" },
   { key: "dog", name: "Dog", pts: 500, emoji: "🐶", desc: "Loyal and smart" },
   { key: "owl", name: "Owl", pts: 800, emoji: "🦉", desc: "Wise observer" },
   { key: "lion", name: "Lion", pts: 1000, emoji: "🦁", desc: "King of knowledge" },
@@ -16,47 +17,174 @@ export default function ResultPage() {
   const { user } = useUser();
   const { state } = useLocation();
 
-  if (!state) return <div>No results.</div>;
+  if (!state) return null;
 
   const { score } = state;
-  const message = score >= 100 ? "Great job!" : "Keep practicing!";
+  const allAchievements = ANIMALS;
+  const unlockedKeys = user.unlocked || [];
+  const totalPoints = user.totalPoints || 0;
 
-const totalPointsAfterQuiz = (user.totalPoints || 0);
-const unlockedKeys = user.unlocked || [];
-const newlyUnlocked = ANIMALS.find(a =>
-  !unlockedKeys.includes(a.key) && totalPointsAfterQuiz >= a.pts
-);
+  const currentAchievement = allAchievements
+    .filter(a => unlockedKeys.includes(a.key))
+    .slice(-1)[0];
 
-const nextAnimal = ANIMALS.find(a => !unlockedKeys.includes(a.key));
-
-
+  const nextAchievements = allAchievements
+    .filter(a => !unlockedKeys.includes(a.key))
+    .slice(0, 2);
+  
   return (
-    <div style={{ padding: 20 }}>
+    <>
       <Navbar />
-      <h2>Quiz Finished!</h2>
-      <p>
-        Player: <strong>{user.username}</strong>
-      </p>
-      <p>Total points: <strong>{user.totalPoints}</strong></p>
-      <p>Points earned this quiz: {score}</p>
-      <p>{message}</p>
 
-       {newlyUnlocked && (
-        <div style={{marginTop:16}}>
-          <strong>New Achievement Unlocked!</strong>
-          <div style={{fontSize:32}}>{newlyUnlocked.emoji} {newlyUnlocked.name}</div>
-        </div>
-      )}
+      <Box
+        sx={{
+          width: "100vw",
+          minHeight: "calc(100vh - 72px)",
+          display: "flex",
+          justifyContent: "center",
+          bgcolor: "#F7FAFF",
+          px: 3,
+          py: 4,
+        }}
+      >
+        <Box sx={{ width: "100%", maxWidth: 900 }}>
 
-      {nextAnimal && (
-        <div style={{marginTop:12}}>
-          <p>Next achievement: {nextAnimal.name} {nextAnimal.emoji}</p>
-          <p>Points needed: {Math.max(nextAnimal.pts - totalPointsAfterQuiz, 0)}</p>
-        </div>
-      )}
+          {/* RESULT CARD */}
+          <Box
+            sx={{
+              backgroundColor: "#E8F0FF",
+              borderRadius: 4,
+              p: 4,
+              mb: 4,
+              textAlign: "center",
+            }}
+          >
+            <Typography variant="h4" fontWeight={700} mb={1}>
+              Quiz Finished 🎉
+            </Typography>
+
+            <Typography
+              fontSize={24}
+              fontWeight={800}
+              color="#4F6EF7"
+              mb={3}
+            >
+              Great work, {user.username}
+            </Typography>
 
 
-      <button onClick={() => nav("/leaderboard")}>Go to Leaderboard</button>
-    </div>
+
+            <Typography fontSize={18} fontWeight={600}>
+              Points earned: +{score}
+            </Typography>
+
+            <Typography fontSize={14} color="#555" mt={1}>
+              Total points: {totalPoints}
+            </Typography>
+          </Box>
+
+         <Box sx={{ mb: 6 }}>
+          <Typography
+            variant="h5"
+            fontWeight={800}
+            textAlign="center"
+            mb={4}
+          >
+            Your Achievements
+          </Typography>
+
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: { xs: "1fr", sm: "repeat(3, 0.5fr)" },
+              gap: 4,
+            }}
+          >
+          {/* CURRENT ACHIEVEMENT */}
+          {currentAchievement && (
+            <Box
+              sx={{
+                textAlign: "center",
+                py: 5,
+                borderRadius: 4,
+                backgroundColor: "#fff",
+                boxShadow: "0 8px 22px rgba(0,0,0,0.14)",
+                transform: "scale(1.05)",
+              }}
+            >
+              <Typography fontSize={56}>
+                {currentAchievement.emoji}
+              </Typography>
+
+              <Typography variant="h6" fontWeight={800} mt={2}>
+                {currentAchievement.name}
+              </Typography>
+
+              <Typography fontSize={14} color="#555" mt={1}>
+                {currentAchievement.desc}
+              </Typography>
+
+              <Typography
+                fontSize={13}
+                color="#4F6EF7"
+                fontWeight={700}
+                mt={2}
+              >
+                Unlocked
+              </Typography>
+            </Box>
+          )}
+
+          {/* NEXT ACHIEVEMENTS */}
+          {nextAchievements.map((a) => (
+            <Box
+              key={a.key}
+              sx={{
+                textAlign: "center",
+                py: 5,
+                borderRadius: 4,
+                backgroundColor: "#fff",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+                opacity: 0.6,
+              }}
+            >
+              <Typography fontSize={48}>🔒</Typography>
+
+              <Typography variant="h6" fontWeight={700} mt={2}>
+                {a.name}
+              </Typography>
+
+              <Typography fontSize={14} color="#555" mt={1}>
+                {a.desc}
+              </Typography>
+
+              <Typography fontSize={13} mt={2}>
+                {Math.max(a.pts - totalPoints, 0)} pts to unlock
+              </Typography>
+            </Box>
+          ))}
+        </Box>
+      </Box>
+          {/* CTA */}
+          <Button
+            fullWidth
+            onClick={() => nav("/leaderboard")}
+            sx={{
+              py: 1.8,
+              borderRadius: 30,
+              fontSize: 18,
+              fontWeight: 600,
+              backgroundColor: "#4F6EF7",
+              color: "#fff",
+              "&:hover": {
+                backgroundColor: "#3B5BDB",
+              },
+            }}
+          >
+            Go to Leaderboard
+          </Button>
+        </Box>
+      </Box>
+    </>
   );
 }
