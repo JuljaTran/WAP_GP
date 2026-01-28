@@ -1,9 +1,9 @@
 import { Box, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import Navbar from "../components/Navbar";
 import { useUser } from "../context/useUser.js";
 
-export default function LeaderboardPage(){
+export default function LeaderboardPage() {
   const { user } = useUser();
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -31,6 +31,47 @@ export default function LeaderboardPage(){
     loadLeaderboard();
   }, []);
 
+  const displayedRows = useMemo(() => {
+    if (!user || rows.length === 0) return [];
+
+    const result = [];
+    const top20 = rows.slice(0, 20);
+    const myIndex = rows.findIndex(
+      r => r.username === user.username
+    );
+
+    // Top 20 immer anzeigen
+    top20.forEach((r, i) => {
+      result.push({
+        ...r,
+        rank: i + 1
+      });
+    });
+
+    // Eigener Rang ist unter den Top 20
+    if (myIndex !== -1 && myIndex < 20) {
+      if (rows.length > 20) {
+        result.push({ _id: "ellipsis-bottom", ellipsis: true });
+      }
+      return result;
+    }
+
+    // Eigener Rang ist unter den Top 20
+    if (myIndex !== -1 && myIndex >= 20) {
+      result.push({ _id: "ellipsis-top", ellipsis: true });
+
+      result.push({
+        ...rows[myIndex],
+        rank: myIndex + 1,
+        isMe: true
+      });
+
+      result.push({ _id: "ellipsis-bottom", ellipsis: true });
+    }
+
+    return result;
+  }, [rows, user]);
+
   if (loading) {
     return (
       <>
@@ -53,19 +94,36 @@ export default function LeaderboardPage(){
           justifyContent: "center",
           bgcolor: "#F7FAFF",
           px: 3,
-          py: 6,
+          py: 6
         }}
       >
         <Box sx={{ width: "100%", maxWidth: 800 }}>
-          <Typography variant="h4" sx={{ fontWeight: 700, mb: 4, textAlign: "center" }}>
+          <Typography
+            variant="h4"
+            sx={{ fontWeight: 700, mb: 4, textAlign: "center" }}
+          >
             Leaderboard
           </Typography>
 
-          {loading ? (
-            <Typography textAlign="center">Loading leaderboard...</Typography>
-          ) : (
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-              {rows.map((r, i) => (
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            {displayedRows.map(r => {
+              if (r.ellipsis) {
+                return (
+                  <Box
+                    key={r._id}
+                    sx={{
+                      textAlign: "center",
+                      py: 1,
+                      color: "#999",
+                      fontWeight: 600
+                    }}
+                  >
+                    ...
+                  </Box>
+                );
+              }
+
+              return (
                 <Box
                   key={r._id}
                   sx={{
@@ -75,31 +133,34 @@ export default function LeaderboardPage(){
                     px: 3,
                     py: 2,
                     borderRadius: 3,
-                    backgroundColor: r.username === user?.username ? "#fff9c4" : "#fff",
+                    backgroundColor:
+                      r.username === user?.username ? "#fff9c4" : "#fff",
                     boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
                     transition: "all 0.25s ease",
                     "&:hover": {
                       transform: "translateY(-2px)",
-                      boxShadow: "0 6px 18px rgba(0,0,0,0.12)",
-                    },
+                      boxShadow: "0 6px 18px rgba(0,0,0,0.12)"
+                    }
                   }}
                 >
                   <Typography sx={{ fontWeight: 600 }}>
-                    {i + 1}. {r.username} — {r.totalPoints} pts
+                    {r.rank}. {r.username} — {r.totalPoints} pts
                   </Typography>
-                  <Typography sx={{ fontSize: 28 }}>{avatarEmoji(r.avatar)}</Typography>
+                  <Typography sx={{ fontSize: 28 }}>
+                    {avatarEmoji(r.avatar)}
+                  </Typography>
                 </Box>
-              ))}
-            </Box>
-          )}
+              );
+            })}
+          </Box>
         </Box>
       </Box>
     </>
   );
 }
 
-function avatarEmoji(k){
-  switch(k){
+function avatarEmoji(k) {
+  switch (k) {
     case "fox": return "🦊";
     case "rabbit": return "🐰";
     case "dog": return "🐶";
